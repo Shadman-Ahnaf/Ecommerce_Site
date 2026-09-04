@@ -1,0 +1,767 @@
+﻿@using Ecom.Models
+
+@{
+    Layout = null;
+
+    int totalCustomers = ViewBag.TotalCustomers ?? 0;
+    int totalSellers = ViewBag.TotalSellers ?? 0;
+    int activeCustomers = ViewBag.ActiveCustomers ?? 0;
+    int activeSellers = ViewBag.ActiveSellers ?? 0;
+
+    int pendingSellerApplications =
+        ViewBag.PendingSellerApplications ?? 0;
+
+    int approvedSellerApplications =
+        ViewBag.ApprovedSellerApplications ?? 0;
+
+    int rejectedSellerApplications =
+        ViewBag.RejectedSellerApplications ?? 0;
+
+    int totalProducts = ViewBag.TotalProducts ?? 0;
+    int pendingProducts = ViewBag.PendingProducts ?? 0;
+    int approvedProducts = ViewBag.ApprovedProducts ?? 0;
+    int rejectedProducts = ViewBag.RejectedProducts ?? 0;
+
+    int totalOrders = ViewBag.TotalOrders ?? 0;
+    int pendingOrders = ViewBag.PendingOrders ?? 0;
+    int deliveredOrders = ViewBag.DeliveredOrders ?? 0;
+    int cancelledOrders = ViewBag.CancelledOrders ?? 0;
+
+    decimal totalRevenue = ViewBag.TotalRevenue ?? 0m;
+
+    var recentApplications =
+        ViewBag.RecentApplications
+        as List<SellerApplication>
+        ?? new List<SellerApplication>();
+
+    var recentProducts =
+        ViewBag.RecentProducts
+        as List<Product>
+        ?? new List<Product>();
+
+    var recentOrders =
+        ViewBag.RecentOrders
+        as List<Order>
+        ?? new List<Order>();
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Dashboard - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+    <!-- ============================================================
+         SIDEBAR
+         ============================================================ -->
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link active">
+
+                <span class="admin-nav-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">◇</span>
+
+                <span>Seller Applications</span>
+
+                @if (pendingSellerApplications > 0)
+                {
+                    <span class="admin-nav-badge">
+                        @pendingSellerApplications
+                    </span>
+                }
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">□</span>
+
+                <span>Products</span>
+
+                @if (pendingProducts > 0)
+                {
+                    <span class="admin-nav-badge">
+                        @pendingProducts
+                    </span>
+                }
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">♙</span>
+
+                <span>Sellers</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">♧</span>
+
+                <span>Customers</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Notifications"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">◉</span>
+
+                <span>Notifications</span>
+
+            </a>
+
+        </nav>
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>Administrator</strong>
+
+                    <span>System Control</span>
+
+                </div>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ============================================================
+         MAIN
+         ============================================================ -->
+
+    <main class="admin-main">
+
+        <!-- TOP BAR -->
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    ADIBUY ADMINISTRATION
+                </span>
+
+                <h1>
+                    Control Center
+                </h1>
+
+                <p>
+                    Monitor your marketplace, sellers,
+                    products and orders from one place.
+                </p>
+
+            </div>
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Admin"
+                   asp-action="Notifications"
+                   class="admin-icon-button"
+                   title="Notifications">
+                    ◉
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="admin-store-button">
+                    View Store
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- ========================================================
+             QUICK ACTIONS
+             ======================================================== -->
+
+        <section class="admin-quick-actions">
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-action-card">
+
+                <div class="admin-action-icon">
+                    ◇
+                </div>
+
+                <div>
+
+                    <strong>
+                        Seller Applications
+                    </strong>
+
+                    <span>
+                        @pendingSellerApplications waiting for review
+                    </span>
+
+                </div>
+
+                <b>→</b>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               asp-route-status="Pending"
+               class="admin-action-card">
+
+                <div class="admin-action-icon">
+                    □
+                </div>
+
+                <div>
+
+                    <strong>
+                        Product Approval
+                    </strong>
+
+                    <span>
+                        @pendingProducts products waiting
+                    </span>
+
+                </div>
+
+                <b>→</b>
+
+            </a>
+
+        </section>
+
+
+        <!-- ========================================================
+             OVERVIEW
+             ======================================================== -->
+
+        <section class="admin-section">
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <span>OVERVIEW</span>
+
+                    <h2>
+                        Marketplace at a glance
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-stat-grid">
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-top">
+                        <span>Customers</span>
+                        <i>♧</i>
+                    </div>
+
+                    <strong>
+                        @totalCustomers
+                    </strong>
+
+                    <small>
+                        @activeCustomers active accounts
+                    </small>
+
+                </div>
+
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-top">
+                        <span>Sellers</span>
+                        <i>♙</i>
+                    </div>
+
+                    <strong>
+                        @totalSellers
+                    </strong>
+
+                    <small>
+                        @activeSellers active sellers
+                    </small>
+
+                </div>
+
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-top">
+                        <span>Products</span>
+                        <i>□</i>
+                    </div>
+
+                    <strong>
+                        @totalProducts
+                    </strong>
+
+                    <small>
+                        @approvedProducts approved
+                    </small>
+
+                </div>
+
+
+                <div class="admin-stat-card admin-stat-highlight">
+
+                    <div class="admin-stat-top">
+                        <span>Revenue</span>
+                        <i>৳</i>
+                    </div>
+
+                    <strong>
+                        ৳@totalRevenue.ToString("N0")
+                    </strong>
+
+                    <small>
+                        From non-cancelled orders
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================================
+             APPROVAL STATUS
+             ======================================================== -->
+
+        <section class="admin-section">
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <span>MODERATION</span>
+
+                    <h2>
+                        Approval status
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-moderation-grid">
+
+                <a asp-controller="Admin"
+                   asp-action="SellerApplications"
+                   asp-route-status="Pending"
+                   class="admin-moderation-card">
+
+                    <div class="moderation-number">
+                        @pendingSellerApplications
+                    </div>
+
+                    <div class="moderation-content">
+
+                        <strong>
+                            Pending Sellers
+                        </strong>
+
+                        <span>
+                            Applications requiring review
+                        </span>
+
+                    </div>
+
+                    <div class="moderation-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <a asp-controller="Admin"
+                   asp-action="Products"
+                   asp-route-status="Pending"
+                   class="admin-moderation-card">
+
+                    <div class="moderation-number">
+                        @pendingProducts
+                    </div>
+
+                    <div class="moderation-content">
+
+                        <strong>
+                            Pending Products
+                        </strong>
+
+                        <span>
+                            Products requiring approval
+                        </span>
+
+                    </div>
+
+                    <div class="moderation-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <div class="admin-moderation-card static">
+
+                    <div class="moderation-number approved">
+                        @approvedProducts
+                    </div>
+
+                    <div class="moderation-content">
+
+                        <strong>
+                            Live Products
+                        </strong>
+
+                        <span>
+                            Approved products currently active
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-moderation-card static">
+
+                    <div class="moderation-number rejected">
+                        @rejectedProducts
+                    </div>
+
+                    <div class="moderation-content">
+
+                        <strong>
+                            Rejected Products
+                        </strong>
+
+                        <span>
+                            Products declined by administration
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================================
+             ORDERS
+             ======================================================== -->
+
+        <section class="admin-section">
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <span>ORDERS</span>
+
+                    <h2>
+                        Order activity
+                    </h2>
+
+                </div>
+
+                <div class="admin-mini-total">
+                    @totalOrders total orders
+                </div>
+
+            </div>
+
+
+            <div class="admin-order-stats">
+
+                <div>
+                    <strong>@pendingOrders</strong>
+                    <span>Active / Processing</span>
+                </div>
+
+                <div>
+                    <strong>@deliveredOrders</strong>
+                    <span>Delivered</span>
+                </div>
+
+                <div>
+                    <strong>@cancelledOrders</strong>
+                    <span>Cancelled</span>
+                </div>
+
+                <div>
+                    <strong>@approvedSellerApplications</strong>
+                    <span>Approved Sellers</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================================
+             RECENT APPLICATIONS + PRODUCTS
+             ======================================================== -->
+
+        <section class="admin-two-column">
+
+
+            <!-- RECENT SELLER APPLICATIONS -->
+
+            <div class="admin-table-card">
+
+                <div class="admin-table-header">
+
+                    <div>
+
+                        <span>SELLERS</span>
+
+                        <h3>
+                            Recent applications
+                        </h3>
+
+                    </div>
+
+                    <a asp-controller="Admin"
+                       asp-action="SellerApplications">
+                        View all →
+                    </a>
+
+                </div>
+
+
+                @if (recentApplications.Count == 0)
+                {
+                    <div class="admin-empty">
+                        No seller applications yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="admin-list">
+
+                        @foreach (var application in recentApplications)
+                        {
+                            <div class="admin-list-row">
+
+                                <div class="admin-list-avatar">
+                                    @(string.IsNullOrWhiteSpace(application.User.Name)
+                                        ? "?"
+                                        : application.User.Name.Substring(0, 1).ToUpper())
+                                </div>
+
+                                <div class="admin-list-info">
+
+                                    <strong>
+                                        @application.BusinessName
+                                    </strong>
+
+                                    <span>
+                                        @application.User.Name
+                                    </span>
+
+                                </div>
+
+                                <div class="admin-status
+                                    @(application.Status == "Approved"
+                                        ? "approved"
+                                        : application.Status == "Rejected"
+                                            ? "rejected"
+                                            : "pending")">
+
+                                    @application.Status
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- RECENT PRODUCTS -->
+
+            <div class="admin-table-card">
+
+                <div class="admin-table-header">
+
+                    <div>
+
+                        <span>CATALOG</span>
+
+                        <h3>
+                            Recent products
+                        </h3>
+
+                    </div>
+
+                    <a asp-controller="Admin"
+                       asp-action="Products">
+                        View all →
+                    </a>
+
+                </div>
+
+
+                @if (recentProducts.Count == 0)
+                {
+                    <div class="admin-empty">
+                        No products have been added yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="admin-list">
+
+                        @foreach (var product in recentProducts)
+                        {
+                            <div class="admin-list-row">
+
+                                <div class="admin-product-placeholder">
+                                    □
+                                </div>
+
+                                <div class="admin-list-info">
+
+                                    <strong>
+                                        @product.Name
+                                    </strong>
+
+                                    <span>
+                                        @(product.Seller?.BusinessName
+                                            ?? "Unknown Seller")
+                                    </span>
+
+                                </div>
+
+                                <div class="admin-status
+                                    @(product.Status == ProductStatus.Approved
+                                        ? "approved"
+                                        : product.Status == ProductStatus.Rejected
+                                            ? "rejected"
+                                            : "pending")">
+
+                                    @product.Status
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================================
+             FOOTER
+             ======================================================== -->
+
+        <footer class="admin-footer">
+
+            <span>
+                AdiBuy Administration
+            </span>
+
+            <span>
+                Marketplace Control Center
+            </span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,679 @@
+﻿@model Ecom.ViewModels.ProductDetailsViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = Model.Product.Name;
+
+    var firstImage = Model.Product.ProductImages.FirstOrDefault()?.ImageUrl
+        ?? "/images/no-product-image.png";
+
+    double averageRating = Model.Reviews.Any()
+        ? Model.Reviews.Average(r => r.Rating)
+        : 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@Model.Product.Name - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="~/css/adibuy.css" />
+
+    <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f6f8fb;
+                color: #1f2937;
+            }
+
+            .product-navbar {
+                height: 72px;
+                background: #111827;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 7%;
+            }
+
+            .product-brand {
+                color: white;
+                text-decoration: none;
+                font-size: 25px;
+                font-weight: 800;
+            }
+
+                .product-brand span {
+                    color: #60a5fa;
+                }
+
+            .product-back {
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+                .product-back:hover {
+                    color: #60a5fa;
+                }
+
+            .details-container {
+                width: min(1200px, 90%);
+                margin: 40px auto;
+            }
+
+            .product-main {
+                display: grid;
+                grid-template-columns: 1.1fr 1fr;
+                gap: 40px;
+                background: white;
+                border-radius: 20px;
+                padding: 35px;
+                box-shadow: 0 10px 35px rgba(0,0,0,.06);
+            }
+
+            .main-image {
+                height: 450px;
+                background: #f8fafc;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+
+                .main-image img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+            .product-info {
+                padding: 10px 5px;
+            }
+
+            .category-label {
+                display: inline-block;
+                background: #eff6ff;
+                color: #2563eb;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            .product-info h1 {
+                font-size: 34px;
+                margin: 0 0 15px;
+                line-height: 1.2;
+            }
+
+            .rating-summary {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .stars {
+                color: #f59e0b;
+            }
+
+            .rating-count {
+                color: #6b7280;
+                font-size: 14px;
+            }
+
+            .price {
+                font-size: 31px;
+                font-weight: 800;
+                margin: 20px 0;
+            }
+
+            .description {
+                color: #6b7280;
+                line-height: 1.7;
+                margin-bottom: 25px;
+            }
+
+            .seller-box {
+                border-top: 1px solid #e5e7eb;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 18px 0;
+                margin: 20px 0;
+            }
+
+            .seller-label {
+                color: #6b7280;
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .seller-name {
+                font-weight: 700;
+                font-size: 16px;
+            }
+
+            .stock {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+                .stock.available {
+                    color: #059669;
+                }
+
+                .stock.unavailable {
+                    color: #dc2626;
+                }
+
+            .reviews-section {
+                margin-top: 40px;
+            }
+
+            .section-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .review-layout {
+                display: grid;
+                grid-template-columns: 1.4fr .8fr;
+                gap: 25px;
+            }
+
+            .reviews-card,
+            .write-review-card {
+                background: white;
+                border-radius: 16px;
+                padding: 25px;
+                box-shadow: 0 8px 25px rgba(0,0,0,.05);
+            }
+
+            .review {
+                padding: 20px 0;
+                border-bottom: 1px solid #eef0f3;
+            }
+
+                .review:first-child {
+                    padding-top: 0;
+                }
+
+                .review:last-child {
+                    border-bottom: none;
+                }
+
+            .review-top {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .review-user {
+                font-weight: 700;
+            }
+
+            .review-date {
+                color: #9ca3af;
+                font-size: 12px;
+            }
+
+            .review-comment {
+                margin: 10px 0 0;
+                color: #4b5563;
+                line-height: 1.6;
+            }
+
+            .empty-reviews {
+                text-align: center;
+                color: #9ca3af;
+                padding: 30px 0;
+            }
+
+            .write-review-card h3 {
+                margin-top: 0;
+            }
+
+            .review-form-group {
+                margin-bottom: 17px;
+            }
+
+                .review-form-group label {
+                    display: block;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                    font-size: 14px;
+                }
+
+                .review-form-group select,
+                .review-form-group textarea {
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 12px;
+                    border: 1px solid #d1d5db;
+                    border-radius: 9px;
+                    font-family: inherit;
+                }
+
+                .review-form-group textarea {
+                    min-height: 120px;
+                    resize: vertical;
+                }
+
+            .review-button {
+                width: 100%;
+                border: none;
+                background: #2563eb;
+                color: white;
+                padding: 13px;
+                border-radius: 9px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+                .review-button:hover {
+                    background: #1d4ed8;
+                }
+
+            .review-alert {
+                padding: 12px 14px;
+                border-radius: 9px;
+                margin-bottom: 15px;
+                font-size: 14px;
+            }
+
+            .review-success {
+                background: #ecfdf5;
+                color: #047857;
+            }
+
+            .review-error {
+                background: #fef2f2;
+                color: #b91c1c;
+            }
+
+            .related-section {
+                margin-top: 45px;
+            }
+
+            .related-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px;
+            }
+
+            .related-card {
+                background: white;
+                border-radius: 14px;
+                overflow: hidden;
+                text-decoration: none;
+                color: inherit;
+                box-shadow: 0 7px 22px rgba(0,0,0,.05);
+                transition: transform .2s;
+            }
+
+                .related-card:hover {
+                    transform: translateY(-4px);
+                }
+
+            .related-image {
+                height: 180px;
+                background: #f8fafc;
+            }
+
+                .related-image img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+            .related-info {
+                padding: 15px;
+            }
+
+                .related-info h3 {
+                    margin: 0 0 8px;
+                    font-size: 15px;
+                }
+
+            .related-price {
+                font-weight: 800;
+            }
+
+            @@media (max-width: 850px) {
+                .product-main,
+                .review-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .related-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .main-image {
+                    height: 350px;
+                }
+            }
+
+            @@media (max-width: 500px) {
+                .related-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .product-main {
+                    padding: 20px;
+                }
+
+                .product-info h1 {
+                    font-size: 27px;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <nav class="product-navbar">
+        <a asp-controller="Home"
+           asp-action="Shop"
+           class="product-brand">
+            Adi<span>Buy</span>
+        </a>
+
+        <a asp-controller="Home"
+           asp-action="Shop"
+           class="product-back">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Shop
+        </a>
+    </nav>
+
+    <main class="details-container">
+
+        <section class="product-main">
+
+            <div class="main-image">
+                <img src="@firstImage"
+                     alt="@Model.Product.Name" />
+            </div>
+
+            <div class="product-info">
+
+                @if (Model.Product.Category != null)
+                {
+                    <span class="category-label">
+                        @Model.Product.Category.CategoryName
+                    </span>
+                }
+
+                <h1>@Model.Product.Name</h1>
+
+                <div class="rating-summary">
+                    <span class="stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Round(averageRating))
+                            {
+                                <i class="fa-solid fa-star"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-regular fa-star"></i>
+                            }
+                        }
+                    </span>
+
+                    <span class="rating-count">
+                        @(averageRating > 0
+                            ? averageRating.ToString("0.0")
+                            : "No rating")
+                        · @Model.Reviews.Count review@(Model.Reviews.Count == 1 ? "" : "s")
+                    </span>
+                </div>
+
+                <div class="price">
+                    ৳ @Model.Product.Price.ToString("N2")
+                </div>
+
+                <p class="description">
+                    @Model.Product.Description
+                </p>
+
+                <div class="seller-box">
+                    <div class="seller-label">
+                        Sold by
+                    </div>
+
+                    <div class="seller-name">
+                        <i class="fa-solid fa-store"></i>
+                        @Model.SellerName
+                    </div>
+                </div>
+
+                @if (Model.Product.StockQuantity > 0)
+                {
+                    <div class="stock available">
+                        <i class="fa-solid fa-circle-check"></i>
+                        @Model.Product.StockQuantity item(s) available
+                    </div>
+                }
+                else
+                {
+                    <div class="stock unavailable">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Out of stock
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+        <section class="reviews-section">
+
+            <h2 class="section-title">
+                Customer Reviews
+            </h2>
+
+            <div class="review-layout">
+
+                <div class="reviews-card">
+
+                    @if (TempData["ReviewMessage"] != null)
+                    {
+                        <div class="review-alert review-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                            @TempData["ReviewMessage"]
+                        </div>
+                    }
+
+                    @if (TempData["ReviewError"] != null)
+                    {
+                        <div class="review-alert review-error">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            @TempData["ReviewError"]
+                        </div>
+                    }
+
+                    @if (Model.Reviews.Any())
+                    {
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <div class="review">
+
+                                <div class="review-top">
+
+                                    <div>
+                                        <div class="review-user">
+                                            <i class="fa-solid fa-circle-user"></i>
+                                            @review.User.Name
+                                        </div>
+
+                                        <div class="stars">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="fa-solid fa-star"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa-regular fa-star"></i>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <span class="review-date">
+                                        @review.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy")
+                                    </span>
+
+                                </div>
+
+                                <p class="review-comment">
+                                    @review.Comment
+                                </p>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-reviews">
+                            <i class="fa-regular fa-comment-dots fa-2x"></i>
+                            <p>No reviews yet. Be the first to review this product.</p>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="write-review-card">
+
+                    <h3>Write a Review</h3>
+
+                    @if (!User.Identity?.IsAuthenticated ?? true)
+                    {
+                        <p>Please log in as a customer to leave a review.</p>
+                        <a asp-controller="Account"
+                           asp-action="CustomerLogin">
+                            Sign In
+                        </a>
+                    }
+                    else if (Model.HasReviewed)
+                    {
+                        <p>
+                            <i class="fa-solid fa-circle-check"></i>
+                            You have already reviewed this product.
+                        </p>
+                    }
+                    else
+                    {
+                        <form asp-controller="Product"
+                              asp-action="AddReview"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="productId"
+                                   value="@Model.Product.ProductId" />
+
+                            <div class="review-form-group">
+                                <label for="rating">
+                                    Rating
+                                </label>
+
+                                <select id="rating"
+                                        name="rating"
+                                        required>
+                                    <option value="">Select rating</option>
+                                    <option value="5">★★★★★ — Excellent</option>
+                                    <option value="4">★★★★☆ — Very Good</option>
+                                    <option value="3">★★★☆☆ — Good</option>
+                                    <option value="2">★★☆☆☆ — Fair</option>
+                                    <option value="1">★☆☆☆☆ — Poor</option>
+                                </select>
+                            </div>
+
+                            <div class="review-form-group">
+                                <label for="comment">
+                                    Your Review
+                                </label>
+
+                                <textarea id="comment"
+                                          name="comment"
+                                          maxlength="500"
+                                          placeholder="Share your experience with this product..."
+                                          required></textarea>
+                            </div>
+
+                            <button type="submit"
+                                    class="review-button">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Submit Review
+                            </button>
+
+                        </form>
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+        @if (Model.RelatedProducts.Any())
+        {
+            <section class="related-section">
+
+                <h2 class="section-title">
+                    You May Also Like
+                </h2>
+
+                <div class="related-grid">
+
+                    @foreach (var related in Model.RelatedProducts)
+                    {
+                        var relatedImage =
+                            related.ProductImages.FirstOrDefault()?.ImageUrl
+                            ?? "/images/no-product-image.png";
+
+                        <a asp-controller="Product"
+                           asp-action="Details"
+                           asp-route-id="@related.ProductId"
+                           class="related-card">
+
+                            <div class="related-image">
+                                <img src="@relatedImage"
+                                     alt="@related.Name" />
+                            </div>
+
+                            <div class="related-info">
+
+                                <h3>@related.Name</h3>
+
+                                <div class="related-price">
+                                    ৳ @related.Price.ToString("N2")
+                                </div>
+
+                            </div>
+
+                        </a>
+                    }
+
+                </div>
+
+            </section>
+        }
+
+    </main>
+
+</body>
+</html>

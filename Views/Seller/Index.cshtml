@@ -1,0 +1,421 @@
+﻿@model Ecom.ViewModels.SellerDashboardViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Seller Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Seller Dashboard - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="seller-dashboard-page">
+
+    <aside class="seller-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo seller-logo">
+
+            Adi<span>Buy</span>
+
+        </a>
+
+        <div class="seller-sidebar-label">
+            SELLER CENTER
+        </div>
+
+        <nav class="seller-navigation">
+
+            <a asp-controller="Seller"
+               asp-action="Index"
+               class="seller-nav-item active">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a asp-controller="Seller"
+               asp-action="AddProduct"
+               class="seller-nav-item">
+                <span>＋</span>
+                Add Product
+            </a>
+
+            <a asp-controller="Seller"
+               asp-action="MyProducts"
+               class="seller-nav-item">
+                <span>▦</span>
+                My Products
+            </a>
+
+            <a href="#orders"
+               class="seller-nav-item">
+                <span>▤</span>
+                Orders
+            </a>
+
+            <a href="#insights"
+               class="seller-nav-item">
+                <span>◒</span>
+                Insights
+            </a>
+
+            <a href="#notifications"
+               class="seller-nav-item">
+                <span>♢</span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="seller-sidebar-bottom">
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-logout">
+                Logout →
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="seller-main">
+
+        <header class="seller-topbar">
+
+            <div>
+                <span class="seller-eyebrow">
+                    SELLER CENTER
+                </span>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Manage your store, products and sales.
+                </p>
+            </div>
+
+            <a asp-controller="Seller"
+               asp-action="AddProduct"
+               class="seller-primary-button">
+                + Add Product
+            </a>
+
+        </header>
+
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="seller-alert">
+                @TempData["Message"]
+            </div>
+        }
+
+
+        <section class="seller-stat-grid">
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-icon">
+                    ◇
+                </span>
+
+                <span class="seller-stat-label">
+                    TOTAL PRODUCTS
+                </span>
+
+                <strong>
+                    @Model.TotalProducts
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-icon">
+                    ✓
+                </span>
+
+                <span class="seller-stat-label">
+                    APPROVED
+                </span>
+
+                <strong>
+                    @Model.ApprovedProducts
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-icon">
+                    ◷
+                </span>
+
+                <span class="seller-stat-label">
+                    PENDING
+                </span>
+
+                <strong>
+                    @Model.PendingProducts
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-icon">
+                    $
+                </span>
+
+                <span class="seller-stat-label">
+                    TOTAL REVENUE
+                </span>
+
+                <strong>
+                    ৳@Model.TotalRevenue.ToString("N2")
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <section class="seller-secondary-stats">
+
+            <div>
+                <span>
+                    TOTAL ORDERS
+                </span>
+
+                <strong>
+                    @Model.TotalOrders
+                </strong>
+            </div>
+
+            <div>
+                <span>
+                    ACTIVE ORDERS
+                </span>
+
+                <strong>
+                    @Model.PendingOrders
+                </strong>
+            </div>
+
+            <div>
+                <span>
+                    DELIVERED
+                </span>
+
+                <strong>
+                    @Model.DeliveredOrders
+                </strong>
+            </div>
+
+            <div>
+                <span>
+                    ITEMS SOLD
+                </span>
+
+                <strong>
+                    @Model.ProductsSold
+                </strong>
+            </div>
+
+        </section>
+
+
+        <section class="seller-content-grid">
+
+            <div class="seller-panel">
+
+                <div class="seller-panel-heading">
+
+                    <div>
+                        <span class="seller-panel-label">
+                            INVENTORY
+                        </span>
+
+                        <h2>
+                            Recent Products
+                        </h2>
+                    </div>
+
+                    <a asp-action="MyProducts">
+                        View All →
+                    </a>
+
+                </div>
+
+
+                @if (Model.RecentProducts.Any())
+                {
+                    <div class="seller-product-list">
+
+                        @foreach (var product in Model.RecentProducts)
+                        {
+                            <a asp-action="ProductDetails"
+                               asp-route-id="@product.ProductId"
+                               class="seller-product-row">
+
+                                <div class="seller-product-image">
+
+                                    @if (product.ProductImages.Any())
+                                    {
+                                        <img src="@product.ProductImages.First().ImageUrl"
+                                             alt="@product.Name" />
+                                    }
+                                    else
+                                    {
+                                        <span>◇</span>
+                                    }
+
+                                </div>
+
+                                <div class="seller-product-info">
+
+                                    <strong>
+                                        @product.Name
+                                    </strong>
+
+                                    <span>
+                                        @product.Category.CategoryName
+                                    </span>
+
+                                </div>
+
+                                <div class="seller-product-price">
+                                    ৳@product.Price.ToString("N2")
+                                </div>
+
+                                <div class="seller-product-status @product.Status.ToString().ToLower()">
+                                    @product.Status
+                                </div>
+
+                            </a>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="seller-empty-state">
+
+                        <div>
+                            ◇
+                        </div>
+
+                        <h3>
+                            No products yet
+                        </h3>
+
+                        <p>
+                            Add your first product to start selling.
+                        </p>
+
+                        <a asp-action="AddProduct">
+                            Add Product →
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <div class="seller-panel" id="insights">
+
+                <div class="seller-panel-heading">
+
+                    <div>
+                        <span class="seller-panel-label">
+                            PERFORMANCE
+                        </span>
+
+                        <h2>
+                            Store Overview
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="seller-overview">
+
+                    <div class="seller-overview-item">
+                        <span>Approved Products</span>
+                        <strong>@Model.ApprovedProducts</strong>
+                    </div>
+
+                    <div class="seller-overview-item">
+                        <span>Pending Approval</span>
+                        <strong>@Model.PendingProducts</strong>
+                    </div>
+
+                    <div class="seller-overview-item">
+                        <span>Items Sold</span>
+                        <strong>@Model.ProductsSold</strong>
+                    </div>
+
+                    <div class="seller-overview-item">
+                        <span>Delivered Orders</span>
+                        <strong>@Model.DeliveredOrders</strong>
+                    </div>
+
+                </div>
+
+                <div class="seller-revenue-box">
+
+                    <span>
+                        TOTAL SALES REVENUE
+                    </span>
+
+                    <strong>
+                        ৳@Model.TotalRevenue.ToString("N2")
+                    </strong>
+
+                    <small>
+                        Based on non-cancelled orders
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

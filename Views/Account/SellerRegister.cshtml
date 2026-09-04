@@ -1,0 +1,402 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Seller Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Become a Seller - AdiBuy</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+</head>
+
+<body class="auth-page seller-page">
+
+    <div class="auth-background">
+        <div class="auth-orb auth-orb-one"></div>
+        <div class="auth-orb auth-orb-two"></div>
+        <div class="auth-orb auth-orb-three"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="auth-navbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="auth-nav-right">
+
+            <span class="auth-nav-text">
+                Already a seller?
+            </span>
+
+            <a asp-controller="Account"
+               asp-action="SellerLogin"
+               class="auth-nav-link">
+                Seller Login →
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- SELLER REGISTER -->
+    <main class="auth-container seller-register-container">
+
+        <div class="auth-card seller-register-card">
+
+            <div class="auth-card-top">
+
+                <div class="auth-icon seller-icon">
+                    ◇
+                </div>
+
+                <span class="auth-label">
+                    SELLER APPLICATION
+                </span>
+
+            </div>
+
+            <div class="auth-heading">
+
+                <h1>
+                    Build your <span>business.</span>
+                </h1>
+
+                <p>
+                    Apply to become an AdiBuy seller and
+                    bring your products to customers.
+                </p>
+
+            </div>
+
+            <form asp-controller="Account"
+                  asp-action="SellerRegister"
+                  method="post"
+                  class="auth-form">
+
+                @Html.AntiForgeryToken()
+
+                <div class="form-section-title">
+                    PERSONAL INFORMATION
+                </div>
+
+                <div class="form-group">
+
+                    <label for="Name">
+                        Full Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ◯
+                        </span>
+
+                        <input type="text"
+                               id="Name"
+                               name="Name"
+                               placeholder="Your full name"
+                               autocomplete="name"
+                               required />
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="Email">
+                            Email
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                @@
+                            </span>
+
+                            <input type="email"
+                                   id="Email"
+                                   name="Email"
+                                   placeholder="you@@example.com"
+                                   autocomplete="email"
+                                   required />
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="Phone">
+                            Phone
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                #
+                            </span>
+
+                            <input type="tel"
+                                   id="Phone"
+                                   name="Phone"
+                                   placeholder="01XXXXXXXXX"
+                                   autocomplete="tel" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="Password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input type="password"
+                               id="Password"
+                               name="Password"
+                               placeholder="Create a password"
+                               autocomplete="new-password"
+                               required />
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="form-section-title seller-section-title">
+                    BUSINESS INFORMATION
+                </div>
+
+                <div class="form-group">
+
+                    <label for="BusinessName">
+                        Business Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ◆
+                        </span>
+
+                        <input type="text"
+                               id="BusinessName"
+                               name="BusinessName"
+                               placeholder="Your business name"
+                               required />
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="BusinessDescription">
+                        Business Description
+                    </label>
+
+                    <div class="input-wrapper textarea-wrapper">
+
+                        <span class="input-icon textarea-icon">
+                            ≡
+                        </span>
+
+                        <textarea id="BusinessDescription"
+                                  name="BusinessDescription"
+                                  placeholder="Tell us about your business..."
+                                  rows="4"
+                                  required></textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="form-section-title seller-section-title">
+                    VERIFICATION DOCUMENTS
+                </div>
+
+                <div class="form-group">
+
+                    <label for="NIDDocumentUrl">
+                        NID Document
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ▣
+                        </span>
+
+                        <input type="text"
+                               id="NIDDocumentUrl"
+                               name="NIDDocumentUrl"
+                               placeholder="NID document URL"
+                               required />
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="BankDocumentUrl">
+                        Bank Document
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ▣
+                        </span>
+
+                        <input type="text"
+                               id="BankDocumentUrl"
+                               name="BankDocumentUrl"
+                               placeholder="Bank document URL"
+                               required />
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="BusinessDocumentUrl">
+                        Business Document
+                        <span class="optional-label">Optional</span>
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ▣
+                        </span>
+
+                        <input type="text"
+                               id="BusinessDocumentUrl"
+                               name="BusinessDocumentUrl"
+                               placeholder="Business document URL" />
+
+                    </div>
+
+                </div>
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-message">
+                </div>
+
+                <div class="seller-notice">
+
+                    <span class="notice-icon">i</span>
+
+                    <p>
+                        Your application will be reviewed by an
+                        AdiBuy administrator before seller access
+                        is granted.
+                    </p>
+
+                </div>
+
+                <button type="submit"
+                        class="auth-button seller-button">
+
+                    <span>
+                        Submit Seller Application
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+            <div class="auth-divider">
+                <span>ALREADY A CUSTOMER?</span>
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="CustomerLogin"
+               class="secondary-auth-button">
+
+                Customer Login
+
+            </a>
+
+            <p class="seller-link">
+
+                Just here to shop?
+
+                <a asp-controller="Account"
+                   asp-action="CustomerRegister">
+                    Create Customer Account →
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
+
+    <script>
+
+            function togglePassword() {
+
+                const password =
+                    document.getElementById("Password");
+
+                const button =
+                    document.querySelector(".password-toggle");
+
+                if (password.type === "password") {
+
+                    password.type = "text";
+                    button.textContent = "Hide";
+
+                } else {
+
+                    password.type = "password";
+                    button.textContent = "Show";
+
+                }
+            }
+
+    </script>
+
+</body>
+</html>

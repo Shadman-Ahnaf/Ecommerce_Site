@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Application Submitted";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Application Submitted - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="auth-page seller-page">
+
+    <div class="auth-background">
+
+        <div class="auth-orb auth-orb-one"></div>
+
+        <div class="auth-orb auth-orb-two"></div>
+
+        <div class="auth-orb auth-orb-three"></div>
+
+    </div>
+
+
+    <nav class="auth-navbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo">
+
+            Adi<span>Buy</span>
+
+        </a>
+
+        <div class="auth-nav-right">
+
+            <span class="auth-nav-text">
+                Seller Application
+            </span>
+
+        </div>
+
+    </nav>
+
+
+    <main class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-card-top">
+
+                <div class="auth-icon seller-icon">
+                    ✓
+                </div>
+
+                <span class="auth-label">
+                    APPLICATION RECEIVED
+                </span>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h1>
+                    Thank <span>you.</span>
+                </h1>
+
+                <p>
+                    Your seller application has been
+                    successfully submitted to AdiBuy.
+                </p>
+
+            </div>
+
+
+            <div class="seller-notice">
+
+                <span class="notice-icon">
+                    i
+                </span>
+
+                <p>
+                    Your application is currently under
+                    review by an AdiBuy administrator.
+                    You will be able to log in as a seller
+                    once your application has been approved.
+                </p>
+
+            </div>
+
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-button"
+               style="text-decoration: none;">
+
+                <span>
+                    Back to AdiBuy
+                </span>
+
+                <span class="button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <div class="auth-divider">
+
+                <span>ALREADY APPROVED?</span>
+
+            </div>
+
+
+            <a asp-controller="Account"
+               asp-action="SellerLogin"
+               class="secondary-auth-button">
+
+                Seller Login
+
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

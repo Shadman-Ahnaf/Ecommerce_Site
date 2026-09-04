@@ -1,0 +1,299 @@
+﻿@model Ecom.Models.Product
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Product Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@Model.Name - AdiBuy Seller</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="seller-dashboard-page">
+
+    <aside class="seller-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo seller-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="seller-sidebar-label">
+            SELLER CENTER
+        </div>
+
+        <nav class="seller-navigation">
+
+            <a asp-action="Index"
+               class="seller-nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a asp-action="AddProduct"
+               class="seller-nav-item">
+                <span>＋</span>
+                Add Product
+            </a>
+
+            <a asp-action="MyProducts"
+               class="seller-nav-item active">
+                <span>▦</span>
+                My Products
+            </a>
+
+            <a href="#orders"
+               class="seller-nav-item">
+                <span>▤</span>
+                Orders
+            </a>
+
+            <a href="#insights"
+               class="seller-nav-item">
+                <span>◒</span>
+                Insights
+            </a>
+
+            <a href="#notifications"
+               class="seller-nav-item">
+                <span>♢</span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="seller-sidebar-bottom">
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-logout">
+                Logout →
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="seller-main">
+
+        <header class="seller-topbar">
+
+            <div>
+
+                <span class="seller-eyebrow">
+                    PRODUCT RECORD
+                </span>
+
+                <h1>
+                    @Model.Name
+                </h1>
+
+                <p>
+                    Product information and sales record.
+                </p>
+
+            </div>
+
+            <a asp-action="MyProducts"
+               class="seller-secondary-button">
+                ← Back to Products
+            </a>
+
+        </header>
+
+
+        <section class="seller-detail-grid">
+
+            <div class="seller-panel">
+
+                <div class="seller-detail-image">
+
+                    @if (Model.ProductImages.Any())
+                    {
+                        <img src="@Model.ProductImages.First().ImageUrl"
+                             alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <span>◇</span>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="seller-panel">
+
+                <span class="seller-panel-label">
+                    PRODUCT INFORMATION
+                </span>
+
+                <h2>
+                    @Model.Name
+                </h2>
+
+                <div class="seller-detail-status">
+
+                    <span class="seller-product-status @Model.Status.ToString().ToLower()">
+                        @Model.Status
+                    </span>
+
+                </div>
+
+                <div class="seller-detail-info">
+
+                    <div>
+                        <span>Category</span>
+                        <strong>
+                            @Model.Category.CategoryName
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Price</span>
+                        <strong>
+                            ৳@Model.Price.ToString("N2")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Current Stock</span>
+                        <strong>
+                            @Model.StockQuantity
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Date Added</span>
+                        <strong>
+                            @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="seller-description">
+
+                    <span>
+                        DESCRIPTION
+                    </span>
+
+                    <p>
+                        @Model.Description
+                    </p>
+
+                </div>
+
+                @if (Model.Status == Ecom.Models.ProductStatus.Rejected)
+                {
+                    <div class="seller-rejection">
+
+                        <strong>
+                            Admin Feedback
+                        </strong>
+
+                        <p>
+                            @(Model.RejectionReason ?? "No reason provided.")
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+
+        <section class="seller-stat-grid">
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-label">
+                    UNITS SOLD
+                </span>
+
+                <strong>
+                    @Model.OrderItems
+                    .Where(x => x.Order.OrderStatus != Ecom.Models.OrderStatus.Cancelled)
+                    .Sum(x => x.Quantity)
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-label">
+                    REVENUE
+                </span>
+
+                <strong>
+                    ৳@Model.OrderItems
+                    .Where(x => x.Order.OrderStatus != Ecom.Models.OrderStatus.Cancelled)
+                    .Sum(x => x.UnitPrice * x.Quantity)
+                    .ToString("N2")
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-label">
+                    REVIEWS
+                </span>
+
+                <strong>
+                    @Model.Reviews.Count
+                </strong>
+
+            </div>
+
+
+            <div class="seller-stat-card">
+
+                <span class="seller-stat-label">
+                    RATING
+                </span>
+
+                <strong>
+                    @(Model.Reviews.Any()
+                        ? Model.Reviews.Average(r => r.Rating).ToString("0.0")
+                        : "—")
+                </strong>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+﻿@model Ecom.ViewModels.SellerEditProductViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Edit Product";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Edit Product - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="seller-dashboard-page">
+
+    <aside class="seller-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo seller-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="seller-sidebar-label">
+            SELLER CENTER
+        </div>
+
+        <nav class="seller-navigation">
+
+            <a asp-action="Index"
+               class="seller-nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a asp-action="AddProduct"
+               class="seller-nav-item">
+                <span>＋</span>
+                Add Product
+            </a>
+
+            <a asp-action="MyProducts"
+               class="seller-nav-item active">
+                <span>▦</span>
+                My Products
+            </a>
+
+            <a href="#orders"
+               class="seller-nav-item">
+                <span>▤</span>
+                Orders
+            </a>
+
+            <a href="#insights"
+               class="seller-nav-item">
+                <span>◒</span>
+                Insights
+            </a>
+
+            <a href="#notifications"
+               class="seller-nav-item">
+                <span>♢</span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="seller-sidebar-bottom">
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-logout">
+                Logout →
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="seller-main">
+
+        <header class="seller-topbar">
+
+            <div>
+
+                <span class="seller-eyebrow">
+                    PRODUCT RECORD
+                </span>
+
+                <h1>
+                    Edit Product
+                </h1>
+
+                <p>
+                    Update your product information.
+                </p>
+
+            </div>
+
+            <a asp-action="MyProducts"
+               class="seller-secondary-button">
+                ← Back to Products
+            </a>
+
+        </header>
+
+
+        <section class="seller-panel seller-form-panel">
+
+            <div class="seller-panel-heading">
+
+                <div>
+
+                    <span class="seller-panel-label">
+                        PRODUCT INFORMATION
+                    </span>
+
+                    <h2>
+                        Edit @Model.Name
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <form asp-action="EditProduct"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="seller-product-form">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="ProductId"
+                       type="hidden" />
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="seller-validation">
+                </div>
+
+
+                <div class="seller-form-group">
+
+                    <label asp-for="Name">
+                        Product Name
+                    </label>
+
+                    <input asp-for="Name"
+                           placeholder="Enter product name" />
+
+                    <span asp-validation-for="Name"></span>
+
+                </div>
+
+
+                <div class="seller-form-group">
+
+                    <label asp-for="CategoryId">
+                        Category
+                    </label>
+
+                    <select asp-for="CategoryId">
+
+                        <option value="0">
+                            Select a category
+                        </option>
+
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.CategoryId">
+                                @category.CategoryName
+                            </option>
+                        }
+
+                    </select>
+
+                    <span asp-validation-for="CategoryId"></span>
+
+                </div>
+
+
+                <div class="seller-form-group">
+
+                    <label asp-for="Description">
+                        Description
+                    </label>
+
+                    <textarea asp-for="Description"
+                              rows="6"
+                              placeholder="Describe your product..."></textarea>
+
+                    <span asp-validation-for="Description"></span>
+
+                </div>
+
+
+                <div class="seller-form-row">
+
+                    <div class="seller-form-group">
+
+                        <label asp-for="Price">
+                            Price
+                        </label>
+
+                        <div class="seller-input-prefix">
+
+                            <span>৳</span>
+
+                            <input asp-for="Price"
+                                   type="number"
+                                   step="0.01"
+                                   min="0.01" />
+
+                        </div>
+
+                        <span asp-validation-for="Price"></span>
+
+                    </div>
+
+
+                    <div class="seller-form-group">
+
+                        <label asp-for="StockQuantity">
+                            Stock Quantity
+                        </label>
+
+                        <input asp-for="StockQuantity"
+                               type="number"
+                               min="0" />
+
+                        <span asp-validation-for="StockQuantity"></span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="seller-form-group">
+
+                    <label>
+                        Current Images
+                    </label>
+
+                    <div class="seller-existing-images">
+
+                        @foreach (var image in Model.ExistingImages)
+                        {
+                            <div class="seller-existing-image">
+
+                                <img src="@image.ImageUrl"
+                                     alt="Product image" />
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="seller-form-group">
+
+                    <label asp-for="Images">
+                        Replace Images
+                    </label>
+
+                    <input asp-for="Images"
+                           type="file"
+                           accept="image/*"
+                           multiple />
+
+                    <small class="seller-form-help">
+                        Leave empty to keep the current images.
+                    </small>
+
+                    <span asp-validation-for="Images"></span>
+
+                </div>
+
+
+                <div class="seller-approval-notice">
+
+                    <div>
+                        i
+                    </div>
+
+                    <p>
+                        After editing, this product will return to
+                        <strong>Pending</strong> status and must be
+                        approved by an administrator again.
+                    </p>
+
+                </div>
+
+
+                <button type="submit"
+                        class="seller-primary-button seller-submit-button">
+
+                    Save Changes →
+
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

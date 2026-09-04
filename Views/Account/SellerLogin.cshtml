@@ -1,0 +1,245 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Seller Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Seller Login - AdiBuy</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+</head>
+
+<body class="auth-page seller-page seller-login-page">
+
+    <div class="auth-background">
+        <div class="auth-orb auth-orb-one"></div>
+        <div class="auth-orb auth-orb-two"></div>
+        <div class="auth-orb auth-orb-three"></div>
+    </div>
+
+
+    <!-- NAVBAR -->
+    <nav class="auth-navbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="auth-nav-right">
+
+            <span class="auth-nav-text">
+                Want to sell on AdiBuy?
+            </span>
+
+            <a asp-controller="Account"
+               asp-action="SellerRegister"
+               class="auth-nav-link">
+                Apply as Seller →
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- SELLER LOGIN -->
+    <main class="auth-container">
+
+        <div class="auth-card seller-login-card">
+
+            <div class="auth-card-top">
+
+                <div class="auth-icon seller-icon">
+                    ◇
+                </div>
+
+                <span class="auth-label">
+                    SELLER PORTAL
+                </span>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h1>
+                    Welcome <span>back.</span>
+                </h1>
+
+                <p>
+                    Sign in to manage your products,
+                    orders and seller account.
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="SellerLogin"
+                  method="post"
+                  class="auth-form">
+
+                @Html.AntiForgeryToken()
+
+
+                <div class="form-group">
+
+                    <label for="EmailOrPhone">
+                        Email or Phone
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            @@
+                        </span>
+
+                        <input type="text"
+                               id="EmailOrPhone"
+                               name="EmailOrPhone"
+                               placeholder="Enter email or phone"
+                               autocomplete="username"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="Password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input type="password"
+                               id="Password"
+                               name="Password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required />
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-message">
+                </div>
+
+
+                <button type="submit"
+                        class="auth-button seller-button">
+
+                    <span>
+                        Sign In to Seller Portal
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="seller-login-note">
+
+                <div class="note-line"></div>
+
+                <p>
+                    Seller access is available only to
+                    <strong>approved AdiBuy sellers.</strong>
+                </p>
+
+                <div class="note-line"></div>
+
+            </div>
+
+
+            <div class="auth-divider">
+                <span>NOT A SELLER YET?</span>
+            </div>
+
+
+            <a asp-controller="Account"
+               asp-action="SellerRegister"
+               class="secondary-auth-button">
+
+                Apply to Become a Seller
+
+            </a>
+
+
+            <p class="seller-link">
+
+                Just here to shop?
+
+                <a asp-controller="Account"
+                   asp-action="CustomerLogin">
+                    Customer Login →
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function togglePassword() {
+
+            const password =
+                document.getElementById("Password");
+
+            const button =
+                document.querySelector(".password-toggle");
+
+            if (password.type === "password") {
+
+                password.type = "text";
+                button.textContent = "Hide";
+
+            } else {
+
+                password.type = "password";
+                button.textContent = "Show";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+﻿@using Ecom.Models
+@model List<User>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Customers - AdiBuy";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Customers - AdiBuy Admin</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+
+            Adi<span>Buy</span>
+
+        </a>
+
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">⌂</span>
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">◇</span>
+                <span>Seller Applications</span>
+
+            </a>
+
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">□</span>
+                <span>Products</span>
+
+            </a>
+
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">♙</span>
+                <span>Sellers</span>
+
+            </a>
+
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link active">
+
+                <span class="admin-nav-icon">♧</span>
+                <span>Customers</span>
+
+            </a>
+
+
+            <a asp-controller="Admin"
+               asp-action="Notifications"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">◉</span>
+                <span>Notifications</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>Administrator</strong>
+
+                    <span>System Control</span>
+
+                </div>
+
+            </div>
+
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+
+                Sign out
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="admin-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    USER MANAGEMENT
+                </span>
+
+                <h1>
+                    Customers
+                </h1>
+
+                <p>
+                    View and manage registered customer accounts.
+                </p>
+
+            </div>
+
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="admin-store-button">
+
+                    View Store
+                    <span>↗</span>
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- MESSAGES -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="admin-message success">
+
+                <span>✓</span>
+
+                @TempData["SuccessMessage"]
+
+            </div>
+        }
+
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="admin-message error">
+
+                <span>!</span>
+
+                @TempData["ErrorMessage"]
+
+            </div>
+        }
+
+
+        <!-- CUSTOMER DATABASE -->
+
+        <section class="admin-section">
+
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <span>CUSTOMER DATABASE</span>
+
+                    <h2>
+                        Registered customers
+                    </h2>
+
+                </div>
+
+
+                <div class="admin-mini-total">
+
+                    @Model.Count
+                    @(Model.Count == 1 ? "customer" : "customers")
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-data-table-card">
+
+                @if (Model.Count == 0)
+                {
+                    <div class="admin-empty">
+
+                        <div class="admin-empty-icon">
+                            ♧
+                        </div>
+
+                        <strong>
+                            No customers found
+                        </strong>
+
+                        <span>
+                            Registered customer accounts will appear here.
+                        </span>
+
+                    </div>
+                }
+                else
+                {
+
+                    <div class="admin-data-table-wrapper">
+
+                        <table class="admin-data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Customer
+                                    </th>
+
+                                    <th>
+                                        Email
+                                    </th>
+
+                                    <th>
+                                        Phone Number
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Entry Date
+                                    </th>
+
+                                    <th class="admin-table-action-heading">
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                @foreach (var customer in Model)
+                                {
+                                    <tr>
+
+                                        <!-- NAME -->
+
+                                        <td>
+
+                                            <div class="admin-table-user">
+
+                                                <div class="admin-table-avatar">
+
+                                                    @(string.IsNullOrWhiteSpace(customer.Name)
+                                                        ? "?"
+                                                        : customer.Name.Substring(0, 1).ToUpper())
+
+                                                </div>
+
+
+                                                <div class="admin-table-user-info">
+
+                                                    <strong>
+                                                        @customer.Name
+                                                    </strong>
+
+                                                    <span>
+                                                        Customer #@customer.UserId
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <!-- EMAIL -->
+
+                                        <td>
+
+                                            <span class="admin-table-primary-text">
+                                                @customer.Email
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- PHONE -->
+
+                                        <td>
+
+                                            <span class="admin-table-primary-text">
+
+                                                @(string.IsNullOrWhiteSpace(customer.Phone)
+                                                    ? "Not provided"
+                                                    : customer.Phone)
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- STATUS -->
+
+                                        <td>
+
+                                            @if (customer.IsActive)
+                                            {
+                                                <span class="admin-account-status active">
+                                                    <i></i>
+                                                    Active
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="admin-account-status inactive">
+                                                    <i></i>
+                                                    Inactive
+                                                </span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- DATE -->
+
+                                        <td>
+
+                                            <span class="admin-table-date">
+
+                                                @customer.CreatedAt
+                                                
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- DELETE -->
+
+                                        <td class="admin-table-action">
+
+                                            <form asp-controller="Admin"
+                                                  asp-action="DeleteCustomer"
+                                                  asp-route-id="@customer.UserId"
+                                                  method="post"
+                                                  onsubmit="return confirm('Are you sure you want to permanently delete this customer account?');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="submit"
+                                                        class="admin-delete-button">
+
+                                                    <span class="delete-icon">
+                                                        ×
+                                                    </span>
+
+                                                    Delete
+
+                                                </button>
+
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="admin-footer">
+
+            <span>
+                AdiBuy Administration
+            </span>
+
+            <span>
+                Customer Management
+            </span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

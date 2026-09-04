@@ -1,0 +1,457 @@
+﻿@model Ecom.Models.Product
+
+@{
+    Layout = null;
+    ViewData["Title"] = Model.Name;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@Model.Name - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">◇</span>
+                <span>Seller Applications</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link active">
+                <span class="admin-nav-icon">□</span>
+                <span>Products</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♙</span>
+                <span>Sellers</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♧</span>
+                <span>Customers</span>
+            </a>
+
+        </nav>
+
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>System Control</span>
+                </div>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="admin-main">
+
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    PRODUCT REVIEW
+                </span>
+
+                <h1>
+                    Product Details
+                </h1>
+
+                <p>
+                    Review the complete product information,
+                    seller details and customer feedback.
+                </p>
+
+            </div>
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Admin"
+                   asp-action="Products"
+                   class="admin-store-button">
+
+                    ← Products
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- PRODUCT -->
+
+        <section class="admin-product-detail">
+
+
+            <!-- IMAGES -->
+
+            <div class="admin-detail-gallery">
+
+                <div class="admin-main-product-image">
+
+                    @{
+                        var mainImage =
+                            Model.ProductImages
+                                .FirstOrDefault()?.ImageUrl;
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(mainImage))
+                    {
+                        <img src="@mainImage"
+                             alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div>
+                            □
+                        </div>
+                    }
+
+                </div>
+
+
+                @if (Model.ProductImages.Any())
+                {
+                    <div class="admin-thumbnail-grid">
+
+                        @foreach (var image in Model.ProductImages)
+                        {
+                            <div class="admin-product-thumbnail">
+
+                                <img src="@image.ImageUrl"
+                                     alt="@Model.Name" />
+
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+
+            <div class="admin-product-detail-info">
+
+                <div class="admin-detail-status-row">
+
+                    <span>
+                        @(Model.Category?.CategoryName ?? "Uncategorized")
+                    </span>
+
+                    <div class="admin-status
+                        @(Model.Status == ProductStatus.Approved
+                            ? "approved"
+                            : Model.Status == ProductStatus.Rejected
+                                ? "rejected"
+                                : "pending")">
+
+                        @Model.Status
+
+                    </div>
+
+                </div>
+
+
+                <h2>
+                    @Model.Name
+                </h2>
+
+
+                <div class="admin-detail-price">
+
+                    ৳ @Model.Price.ToString("N2")
+
+                </div>
+
+
+                <p class="admin-product-description">
+
+                    @Model.Description
+
+                </p>
+
+
+                <div class="admin-product-meta">
+
+                    <div>
+
+                        <span>Stock</span>
+
+                        <strong>
+                            @Model.StockQuantity units
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Added</span>
+
+                        <strong>
+                            @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Product ID</span>
+
+                        <strong>
+                            #@Model.ProductId
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SELLER -->
+
+                <div class="admin-seller-box">
+
+                    <span>SELLER</span>
+
+                    <h3>
+                        @(Model.Seller?.BusinessName ?? "Unknown Seller")
+                    </h3>
+
+                    <p>
+                        @(Model.Seller?.User?.Name ?? "Seller")
+                    </p>
+
+                    <small>
+                        @(Model.Seller?.User?.Email ?? "")
+                    </small>
+
+                </div>
+
+
+                <!-- MODERATION -->
+                @if (Model.Status == ProductStatus.Pending)
+                {
+                    <div class="admin-product-moderation">
+
+                        <form asp-controller="Admin"
+                              asp-action="ApproveProduct"
+                              asp-route-id="@Model.ProductId"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="admin-approve-button">
+
+                                ✓ Approve & Publish
+
+                            </button>
+
+                        </form>
+
+
+                        <form asp-controller="Admin"
+                              asp-action="RejectProduct"
+                              asp-route-id="@Model.ProductId"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="text"
+                                   name="rejectionReason"
+                                   placeholder="Reason for rejection (optional)" />
+
+                            <button type="submit"
+                                    class="admin-reject-button">
+
+                                × Reject Product
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                }
+
+
+                @if (Model.Status == ProductStatus.Rejected &&
+                     !string.IsNullOrWhiteSpace(Model.RejectionReason))
+                {
+                    <div class="admin-rejection-box">
+
+                        <span>REJECTION REASON</span>
+
+                        <p>
+                            @Model.RejectionReason
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- REVIEWS -->
+
+        <section class="admin-section">
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <span>CUSTOMER FEEDBACK</span>
+
+                    <h2>
+                        Product reviews
+                    </h2>
+
+                </div>
+
+                <div class="admin-mini-total">
+
+                    @Model.Reviews.Count reviews
+
+                </div>
+
+            </div>
+
+
+            @if (!Model.Reviews.Any())
+            {
+                <div class="admin-empty-box">
+
+                    <h3>
+                        No reviews yet
+                    </h3>
+
+                    <p>
+                        Customers have not reviewed this product yet.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="admin-review-list">
+
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="admin-review-card">
+
+                            <div class="admin-review-avatar">
+                                ★
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Customer Review
+                                </strong>
+
+                                <p>
+                                    @review.Comment
+                                </p>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </section>
+
+
+        <footer class="admin-footer">
+
+            <span>AdiBuy Administration</span>
+
+            <span>Product Moderation Center</span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

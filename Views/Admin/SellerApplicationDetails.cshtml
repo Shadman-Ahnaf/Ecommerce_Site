@@ -1,0 +1,367 @@
+﻿@model Ecom.Models.SellerApplication
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Seller Application";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Seller Application - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link active">
+                <span class="admin-nav-icon">◇</span>
+                <span>Seller Applications</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">□</span>
+                <span>Products</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♙</span>
+                <span>Sellers</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♧</span>
+                <span>Customers</span>
+            </a>
+
+        </nav>
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>System Control</span>
+                </div>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    SELLER VERIFICATION
+                </span>
+
+                <h1>
+                    Application Review
+                </h1>
+
+                <p>
+                    Review the business information before
+                    approving marketplace access.
+                </p>
+
+            </div>
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Admin"
+                   asp-action="SellerApplications"
+                   class="admin-store-button">
+
+                    ← Applications
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <section class="admin-detail-grid">
+
+
+            <!-- BUSINESS -->
+
+            <div class="admin-detail-card">
+
+                <div class="admin-detail-heading">
+
+                    <span>BUSINESS INFORMATION</span>
+
+                    <div class="admin-status
+                        @(Model.Status == "Approved"
+                            ? "approved"
+                            : Model.Status == "Rejected"
+                                ? "rejected"
+                                : "pending")">
+
+                        @Model.Status
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-detail-title">
+
+                    <h2>
+                        @Model.BusinessName
+                    </h2>
+
+                    <p>
+                        @Model.BusinessDescription
+                    </p>
+
+                </div>
+
+
+                <div class="admin-detail-info">
+
+                    <div>
+                        <span>Applicant</span>
+                        <strong>@Model.User?.Name</strong>
+                    </div>
+
+                    <div>
+                        <span>Email</span>
+                        <strong>@Model.User?.Email</strong>
+                    </div>
+
+                    <div>
+                        <span>Phone</span>
+                        <strong>@(Model.User?.Phone ?? "Not provided")</strong>
+                    </div>
+
+                    <div>
+                        <span>Applied</span>
+                        <strong>
+                            @Model.AppliedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DOCUMENTS -->
+
+            <div class="admin-detail-card">
+
+                <div class="admin-detail-heading">
+
+                    <span>SUBMITTED DOCUMENTS</span>
+
+                </div>
+
+
+                <div class="admin-document-list">
+
+                    <a href="@Model.NIDDocumentUrl"
+                       target="_blank"
+                       class="admin-document">
+
+                        <span>◈</span>
+
+                        <div>
+                            <strong>NID Document</strong>
+                            <small>View submitted document</small>
+                        </div>
+
+                        <b>↗</b>
+
+                    </a>
+
+
+                    <a href="@Model.BankDocumentUrl"
+                       target="_blank"
+                       class="admin-document">
+
+                        <span>◈</span>
+
+                        <div>
+                            <strong>Bank Document</strong>
+                            <small>View submitted document</small>
+                        </div>
+
+                        <b>↗</b>
+
+                    </a>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.BusinessDocumentUrl))
+                    {
+                        <a href="@Model.BusinessDocumentUrl"
+                           target="_blank"
+                           class="admin-document">
+
+                            <span>◈</span>
+
+                            <div>
+                                <strong>Business Document</strong>
+                                <small>View submitted document</small>
+                            </div>
+
+                            <b>↗</b>
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ACTIONS -->
+        @if (Model.Status == "Pending")
+        {
+            <section class="admin-review-actions">
+
+                <div>
+
+                    <span>FINAL DECISION</span>
+
+                    <h2>
+                        Review this application
+                    </h2>
+
+                </div>
+
+
+                <div class="admin-review-buttons">
+
+                    <form asp-controller="Admin"
+                          asp-action="ApproveSeller"
+                          asp-route-id="@Model.ApplicationId"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="admin-approve-button">
+
+                            ✓ Approve Seller
+
+                        </button>
+
+                    </form>
+
+
+                    <form asp-controller="Admin"
+                          asp-action="RejectSeller"
+                          asp-route-id="@Model.ApplicationId"
+                          method="post"
+                          class="admin-reject-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="text"
+                               name="rejectionReason"
+                               placeholder="Reason for rejection (optional)" />
+
+                        <button type="submit"
+                                class="admin-reject-button">
+
+                            × Reject Application
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+        }
+
+
+        <footer class="admin-footer">
+
+            <span>AdiBuy Administration</span>
+
+            <span>Seller Verification Center</span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

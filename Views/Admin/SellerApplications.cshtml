@@ -1,0 +1,302 @@
+﻿@model List<Ecom.Models.SellerApplication>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Seller Applications";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Seller Applications - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">⌂</span>
+                <span>Dashboard</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link active">
+
+                <span class="admin-nav-icon">◇</span>
+                <span>Seller Applications</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">□</span>
+                <span>Products</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">♙</span>
+                <span>Sellers</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">♧</span>
+                <span>Customers</span>
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Notifications"
+               class="admin-nav-link">
+
+                <span class="admin-nav-icon">◉</span>
+                <span>Notifications</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>System Control</span>
+                </div>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    SELLER MANAGEMENT
+                </span>
+
+                <h1>
+                    Seller Applications
+                </h1>
+
+                <p>
+                    Review businesses requesting permission
+                    to sell products on AdiBuy.
+                </p>
+
+            </div>
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="admin-store-button">
+
+                    ← Dashboard
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- MESSAGES -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="admin-alert admin-alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="admin-alert admin-alert-error">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+
+        <!-- APPLICATIONS -->
+
+        <section class="admin-table-card">
+
+            <div class="admin-table-header">
+
+                <div>
+
+                    <span>APPLICATIONS</span>
+
+                    <h3>
+                        Seller requests
+                    </h3>
+
+                </div>
+
+                <div class="admin-mini-total">
+                    @Model.Count applications
+                </div>
+
+            </div>
+
+
+            @if (!Model.Any())
+            {
+                <div class="admin-empty">
+
+                    No seller applications have been submitted yet.
+
+                </div>
+            }
+            else
+            {
+                <div class="admin-application-list">
+
+                    @foreach (var application in Model)
+                    {
+                        <div class="admin-application-row">
+
+                            <div class="admin-list-avatar">
+
+                                @(string.IsNullOrWhiteSpace(application.User?.Name)
+                                    ? "?"
+                                    : application.User.Name.Substring(0, 1).ToUpper())
+
+                            </div>
+
+
+                            <div class="admin-application-info">
+
+                                <strong>
+                                    @application.BusinessName
+                                </strong>
+
+                                <span>
+                                    @application.User?.Name
+                                </span>
+
+                                <small>
+                                    @application.AppliedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </small>
+
+                            </div>
+
+
+                            <div class="admin-status
+                                @(application.Status == "Approved"
+                                    ? "approved"
+                                    : application.Status == "Rejected"
+                                        ? "rejected"
+                                        : "pending")">
+
+                                @application.Status
+
+                            </div>
+
+
+                            <a asp-controller="Admin"
+                               asp-action="SellerApplicationDetails"
+                               asp-route-id="@application.ApplicationId"
+                               class="admin-view-button">
+
+                                Review →
+
+                            </a>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </section>
+
+
+        <footer class="admin-footer">
+
+            <span>AdiBuy Administration</span>
+
+            <span>Seller Verification Center</span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

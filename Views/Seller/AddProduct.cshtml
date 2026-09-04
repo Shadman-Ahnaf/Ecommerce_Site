@@ -1,0 +1,384 @@
+﻿@model Ecom.ViewModels.SellerAddProductViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Add Product";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Product - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="seller-dashboard-page">
+
+    <aside class="seller-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo seller-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="seller-sidebar-label">
+            SELLER CENTER
+        </div>
+
+        <nav class="seller-navigation">
+
+            <a asp-action="Index"
+               class="seller-nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a asp-action="AddProduct"
+               class="seller-nav-item active">
+                <span>＋</span>
+                Add Product
+            </a>
+
+            <a asp-action="MyProducts"
+               class="seller-nav-item">
+                <span>▦</span>
+                My Products
+            </a>
+
+            <a href="#orders"
+               class="seller-nav-item">
+                <span>▤</span>
+                Orders
+            </a>
+
+            <a href="#insights"
+               class="seller-nav-item">
+                <span>◒</span>
+                Insights
+            </a>
+
+            <a href="#notifications"
+               class="seller-nav-item">
+                <span>♢</span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="seller-sidebar-bottom">
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-logout">
+                Logout →
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="seller-main">
+
+        <header class="seller-topbar">
+
+            <div>
+
+                <span class="seller-eyebrow">
+                    INVENTORY
+                </span>
+
+                <h1>
+                    Add Product
+                </h1>
+
+                <p>
+                    Submit a new product for admin approval.
+                </p>
+
+            </div>
+
+            <a asp-action="MyProducts"
+               class="seller-secondary-button">
+                ← My Products
+            </a>
+
+        </header>
+
+
+        <div class="seller-form-layout">
+
+            <section class="seller-panel seller-form-panel">
+
+                <div class="seller-panel-heading">
+
+                    <div>
+
+                        <span class="seller-panel-label">
+                            PRODUCT INFORMATION
+                        </span>
+
+                        <h2>
+                            Create New Product
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <form asp-action="AddProduct"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="seller-product-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="seller-validation">
+                    </div>
+
+
+                    <div class="seller-form-group">
+
+                        <label asp-for="Name">
+                            Product Name
+                        </label>
+
+                        <input asp-for="Name"
+                               placeholder="Enter product name" />
+
+                        <span asp-validation-for="Name"></span>
+
+                    </div>
+
+
+                    <div class="seller-form-group">
+
+                        <label asp-for="CategoryId">
+                            Category
+                        </label>
+
+                        <select asp-for="CategoryId">
+
+                            <option value="0">
+                                Select a category
+                            </option>
+
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.CategoryId">
+                                    @category.CategoryName
+                                </option>
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="CategoryId"></span>
+
+                    </div>
+
+
+                    <div class="seller-form-group">
+
+                        <label asp-for="Description">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  rows="6"
+                                  placeholder="Describe your product..."></textarea>
+
+                        <span asp-validation-for="Description"></span>
+
+                    </div>
+
+
+                    <div class="seller-form-row">
+
+                        <div class="seller-form-group">
+
+                            <label asp-for="Price">
+                                Price
+                            </label>
+
+                            <div class="seller-input-prefix">
+
+                                <span>৳</span>
+
+                                <input asp-for="Price"
+                                       type="number"
+                                       step="0.01"
+                                       min="0.01"
+                                       placeholder="0.00" />
+
+                            </div>
+
+                            <span asp-validation-for="Price"></span>
+
+                        </div>
+
+
+                        <div class="seller-form-group">
+
+                            <label asp-for="StockQuantity">
+                                Stock Quantity
+                            </label>
+
+                            <input asp-for="StockQuantity"
+                                   type="number"
+                                   min="0"
+                                   placeholder="0" />
+
+                            <span asp-validation-for="StockQuantity"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRODUCT IMAGES -->
+
+                    <div class="seller-form-group">
+
+                        <label>
+                            Product Images
+                        </label>
+
+                        <div class="seller-image-upload">
+
+                            <input asp-for="Images"
+                                   type="file"
+                                   id="productImages"
+                                   accept="image/*"
+                                   multiple />
+
+                            <label for="productImages"
+                                   class="seller-upload-box">
+
+                                <div class="seller-upload-icon">
+                                    ↑
+                                </div>
+
+                                <strong>
+                                    Upload Product Images
+                                </strong>
+
+                                <span>
+                                    Click to choose multiple images from your device
+                                </span>
+
+                                <small>
+                                    JPG, JPEG, PNG or WEBP
+                                </small>
+
+                            </label>
+
+                        </div>
+
+                        <div id="imagePreview"
+                             class="seller-image-preview">
+                        </div>
+
+                        <span asp-validation-for="Images"></span>
+
+                    </div>
+
+
+                    <div class="seller-approval-notice">
+
+                        <div>
+                            i
+                        </div>
+
+                        <p>
+                            Your product will be submitted as
+                            <strong>Pending</strong>.
+                            It will become visible to customers
+                            only after an administrator approves it.
+                        </p>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="seller-primary-button seller-submit-button">
+
+                        Submit for Approval →
+
+                    </button>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+            const imageInput = document.getElementById("productImages");
+            const previewContainer = document.getElementById("imagePreview");
+
+            imageInput.addEventListener("change", function() {
+
+                previewContainer.innerHTML = "";
+
+                const files = Array.from(this.files);
+
+                files.forEach(function(file) {
+
+                    if (!file.type.startsWith("image/")) {
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(event) {
+
+                        const preview = document.createElement("div");
+
+                        preview.className = "seller-image-preview-item";
+
+                        preview.innerHTML = `
+                                    <img src="${event.target.result}" alt="Product image preview" />
+                                    <span>${file.name}</span>
+                                `;
+
+                        previewContainer.appendChild(preview);
+                    };
+
+                    reader.readAsDataURL(file);
+
+                });
+
+            });
+
+    </script>
+
+</body>
+</html>

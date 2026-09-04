@@ -1,0 +1,254 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Admin Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Login - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="auth-page login-page">
+
+    <div class="auth-background">
+
+        <div class="auth-orb auth-orb-one"></div>
+
+        <div class="auth-orb auth-orb-two"></div>
+
+        <div class="auth-orb auth-orb-three"></div>
+
+    </div>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="auth-navbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo">
+
+            Adi<span>Buy</span>
+
+        </a>
+
+
+        <div class="auth-nav-right">
+
+            <span class="auth-nav-text">
+                AdiBuy Administration
+            </span>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-nav-link">
+
+                Back to Home →
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ADMIN LOGIN -->
+
+    <main class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-card-top">
+
+                <div class="auth-icon">
+                    ◈
+                </div>
+
+                <span class="auth-label">
+                    ADMINISTRATOR ACCOUNT
+                </span>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h1>
+                    Welcome <span>back.</span>
+                </h1>
+
+                <p>
+                    Sign in to access your AdiBuy
+                    administration dashboard.
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="AdminLogin"
+                  method="post"
+                  class="auth-form">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="EmailOrPhone">
+                        Admin Email
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            @@
+                        </span>
+
+                        <input type="email"
+                               id="EmailOrPhone"
+                               name="EmailOrPhone"
+                               placeholder="Enter admin email"
+                               autocomplete="username"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="Password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input type="password"
+                               id="Password"
+                               name="Password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required />
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+
+                            Show
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VALIDATION -->
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-message">
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button type="submit"
+                        class="auth-button">
+
+                    <span>
+                        Sign In to Dashboard
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-divider">
+
+                <span>AUTHORIZED PERSONNEL ONLY</span>
+
+            </div>
+
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="secondary-auth-button">
+
+                ← Return to AdiBuy
+
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+            function togglePassword() {
+
+                const password =
+                    document.getElementById("Password");
+
+                const button =
+                    document.querySelector(".password-toggle");
+
+                if (password.type === "password") {
+
+                    password.type = "text";
+
+                    button.textContent = "Hide";
+
+                }
+                else {
+
+                    password.type = "password";
+
+                    button.textContent = "Show";
+
+                }
+
+            }
+
+    </script>
+
+</body>
+</html>

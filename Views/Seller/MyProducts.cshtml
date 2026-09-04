@@ -1,0 +1,331 @@
+﻿@model Ecom.ViewModels.SellerProductListViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "My Products";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>My Products - AdiBuy</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="seller-dashboard-page">
+
+    <aside class="seller-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo seller-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="seller-sidebar-label">
+            SELLER CENTER
+        </div>
+
+        <nav class="seller-navigation">
+
+            <a asp-action="Index"
+               class="seller-nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a asp-action="AddProduct"
+               class="seller-nav-item">
+                <span>＋</span>
+                Add Product
+            </a>
+
+            <a asp-action="MyProducts"
+               class="seller-nav-item active">
+                <span>▦</span>
+                My Products
+            </a>
+
+            <a href="#orders"
+               class="seller-nav-item">
+                <span>▤</span>
+                Orders
+            </a>
+
+            <a href="#insights"
+               class="seller-nav-item">
+                <span>◒</span>
+                Insights
+            </a>
+
+            <a href="#notifications"
+               class="seller-nav-item">
+                <span>♢</span>
+                Notifications
+            </a>
+
+        </nav>
+
+        <div class="seller-sidebar-bottom">
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-logout">
+                Logout →
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="seller-main">
+
+        <header class="seller-topbar">
+
+            <div>
+
+                <span class="seller-eyebrow">
+                    INVENTORY
+                </span>
+
+                <h1>
+                    My Products
+                </h1>
+
+                <p>
+                    Manage your products and track approval status.
+                </p>
+
+            </div>
+
+            <a asp-action="AddProduct"
+               class="seller-primary-button">
+                + Add Product
+            </a>
+
+        </header>
+
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="seller-alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="seller-alert seller-alert-error">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+
+        <section class="seller-panel seller-products-panel">
+
+            <div class="seller-panel-heading">
+
+                <div>
+
+                    <span class="seller-panel-label">
+                        PRODUCT RECORD
+                    </span>
+
+                    <h2>
+                        All Products
+                    </h2>
+
+                </div>
+
+                <span class="seller-product-count">
+                    @Model.Products.Count products
+                </span>
+
+            </div>
+
+
+            @if (Model.Products.Any())
+            {
+                <div class="seller-table-wrapper">
+
+                    <table class="seller-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>PRODUCT</th>
+                                <th>CATEGORY</th>
+                                <th>PRICE</th>
+                                <th>STOCK</th>
+                                <th>STATUS</th>
+                                <th>ADDED</th>
+                                <th>ACTIONS</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var product in Model.Products)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <div class="seller-table-product">
+
+                                            <div class="seller-table-image">
+
+                                                @if (product.ProductImages.Any())
+                                                {
+                                                    <img src="@product.ProductImages.First().ImageUrl"
+                                                         alt="@product.Name" />
+                                                }
+                                                else
+                                                {
+                                                    <span>◇</span>
+                                                }
+
+                                            </div>
+
+                                            <div class="seller-table-product-info">
+
+                                                <strong>
+                                                    @product.Name
+                                                </strong>
+
+                                                <span>
+                                                    @(product.Description.Length > 65
+                                                        ? product.Description.Substring(0, 65) + "..."
+                                                        : product.Description)
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        @product.Category.CategoryName
+                                    </td>
+
+
+                                    <td class="seller-table-price">
+                                        ৳@product.Price.ToString("N2")
+                                    </td>
+
+
+                                    <td>
+                                        @product.StockQuantity
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="seller-product-status @product.Status.ToString().ToLower()">
+                                            @product.Status
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        @product.CreatedAt
+                                       
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="seller-product-actions">
+
+                                            <a asp-action="ProductDetails"
+                                               asp-route-id="@product.ProductId"
+                                               class="seller-action-view">
+                                                View
+                                            </a>
+
+                                            <a asp-action="EditProduct"
+                                               asp-route-id="@product.ProductId"
+                                               class="seller-action-edit">
+                                                Edit
+                                            </a>
+
+                                            <form asp-action="DeleteProduct"
+                                                  asp-route-id="@product.ProductId"
+                                                  method="post"
+                                                  onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="submit"
+                                                        class="seller-action-delete">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="seller-empty-state">
+
+                    <div>◇</div>
+
+                    <h3>
+                        No products found
+                    </h3>
+
+                    <p>
+                        Add your first product to your store.
+                    </p>
+
+                    <a asp-action="AddProduct">
+                        Add Product →
+                    </a>
+
+                </div>
+            }
+
+        </section>
+
+    </main>
+
+</body>
+</html>

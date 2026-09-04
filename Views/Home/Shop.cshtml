@@ -1,0 +1,937 @@
+﻿@model Ecom.ViewModels.HomeViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Shop";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AdiBuy — Shop</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css" />
+</head>
+
+<body class="customer-shop-page">
+
+    <!-- ============================================================
+         NAVBAR
+         ============================================================ -->
+
+    <header class="shop-navbar">
+
+        <div class="shop-brand">
+            <a asp-controller="Home" asp-action="Shop">
+                <span class="brand-mark">A</span>
+                <span class="brand-name">AdiBuy</span>
+            </a>
+        </div>
+
+        <!-- SEARCH -->
+
+        <form asp-controller="Home"
+              asp-action="Shop"
+              method="get"
+              class="shop-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="search"
+                   value="@Model.Search"
+                   placeholder="Search products..." />
+
+            @if (Model.CategoryId.HasValue)
+            {
+                <input type="hidden"
+                       name="categoryId"
+                       value="@Model.CategoryId" />
+            }
+
+            @if (Model.MinPrice.HasValue)
+            {
+                <input type="hidden"
+                       name="minPrice"
+                       value="@Model.MinPrice" />
+            }
+
+            @if (Model.MaxPrice.HasValue)
+            {
+                <input type="hidden"
+                       name="maxPrice"
+                       value="@Model.MaxPrice" />
+            }
+
+            @if (Model.DateFilter.HasValue)
+            {
+                <input type="hidden"
+                       name="dateFilter"
+                       value="@Model.DateFilter" />
+            }
+
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+
+        <!-- PROFILE -->
+
+        <div class="shop-profile">
+
+            <button type="button"
+                    class="profile-trigger"
+                    id="profileTrigger">
+
+                <span class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </span>
+
+                <span class="profile-text">
+                    <small>Welcome</small>
+                    <strong>My Account</strong>
+                </span>
+
+                <i class="fa-solid fa-chevron-down profile-arrow"></i>
+
+            </button>
+
+
+            <div class="profile-dropdown"
+                 id="profileDropdown">
+
+                <a asp-controller="Customer"
+                   asp-action="Profile">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <span>
+                        <strong>Profile</strong>
+                        <small>View your account</small>
+                    </span>
+
+                </a>
+
+                <a asp-controller="Customer"
+                   asp-action="Settings">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    <span>
+                        <strong>Settings</strong>
+                        <small>Account preferences</small>
+                    </span>
+
+                </a>
+
+                <div class="profile-divider"></div>
+
+                <a asp-controller="Account"
+                   asp-action="Logout"
+                   class="logout-option">
+
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    <span>
+                        <strong>Logout</strong>
+                        <small>Sign out of AdiBuy</small>
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ============================================================
+         MAIN
+         ============================================================ -->
+
+    <main class="shop-main">
+
+
+        <!-- ========================================================
+             OFFER BANNER
+             ======================================================== -->
+        @if (Model.ActiveOffers.Any())
+        {
+            <section class="shop-offers">
+
+                <div class="offer-heading">
+                    <div>
+                        <span class="section-kicker">
+                            LIMITED TIME
+                        </span>
+
+                        <h1>Special Offers</h1>
+
+                        <p>
+                            Grab the best deals before they disappear.
+                        </p>
+                    </div>
+
+                    <div class="offer-icon">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                </div>
+
+
+                <div class="offer-slider">
+
+                    @foreach (var offer in Model.ActiveOffers.Take(3))
+                    {
+                        <div class="offer-card">
+
+                            <div class="offer-content">
+
+                                <span class="offer-badge">
+                                    SPECIAL OFFER
+                                </span>
+
+                                <h2>
+                                    @offer.Title
+                                </h2>
+
+                                @if (!string.IsNullOrWhiteSpace(offer.Description))
+                                {
+                                    <p>
+                                        @offer.Description
+                                    </p>
+                                }
+
+                                <div class="offer-bottom">
+
+                                    <div class="offer-discount">
+                                        <strong>
+                                            @offer.DiscountPercent.ToString("0.#")%
+                                        </strong>
+
+                                        <span>OFF</span>
+                                    </div>
+
+                                    <span class="offer-date">
+                                        Ends @offer.EndDate.ToLocalTime().ToString("dd MMM")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="offer-decoration">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </section>
+        }
+
+
+
+        <!-- ========================================================
+             SHOP HEADER
+             ======================================================== -->
+
+        <section class="shop-heading">
+
+            <div>
+
+                <span class="section-kicker">
+                    EXPLORE
+                </span>
+
+                <h1>
+                    Find something you'll love.
+                </h1>
+
+                <p>
+                    Discover products from trusted sellers across AdiBuy.
+                </p>
+
+            </div>
+
+            <div class="shop-result-count">
+                <strong>@Model.SearchResults.Count</strong>
+                <span>products available</span>
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================================
+             FILTER BAR
+             ======================================================== -->
+
+        <section class="shop-filter-panel">
+
+            <form asp-controller="Home"
+                  asp-action="Shop"
+                  method="get"
+                  class="shop-filter-form">
+
+                <!-- Category -->
+
+                <div class="filter-field">
+
+                    <label>
+                        <i class="fa-solid fa-layer-group"></i>
+                        Category
+                    </label>
+
+                    <select name="categoryId">
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        @foreach (var category in Model.Categories)
+                        {
+                            if (Model.CategoryId == category.CategoryId)
+                            {
+                                <option value="@category.CategoryId"
+                                        selected>
+                                    @category.CategoryName
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@category.CategoryId">
+                                    @category.CategoryName
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- Minimum Price -->
+
+                <div class="filter-field">
+
+                    <label>
+                        <i class="fa-solid fa-arrow-down"></i>
+                        Min Price
+                    </label>
+
+                    <input type="number"
+                           name="minPrice"
+                           value="@Model.MinPrice"
+                           min="0"
+                           step="0.01"
+                           placeholder="0" />
+
+                </div>
+
+
+                <!-- Maximum Price -->
+
+                <div class="filter-field">
+
+                    <label>
+                        <i class="fa-solid fa-arrow-up"></i>
+                        Max Price
+                    </label>
+
+                    <input type="number"
+                           name="maxPrice"
+                           value="@Model.MaxPrice"
+                           min="0"
+                           step="0.01"
+                           placeholder="Any" />
+
+                </div>
+
+
+                <!-- Date -->
+
+                <div class="filter-field">
+
+                    <label>
+                        <i class="fa-regular fa-clock"></i>
+                        Added
+                    </label>
+
+                    <select name="dateFilter">
+
+                        <option value="">
+                            Any time
+                        </option>
+
+                        @if (Model.DateFilter == 7)
+                        {
+                            <option value="7" selected>
+                                Last 1 Week
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="7">
+                                Last 1 Week
+                            </option>
+                        }
+
+                        @if (Model.DateFilter == 30)
+                        {
+                            <option value="30" selected>
+                                Last 1 Month
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="30">
+                                Last 1 Month
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <button type="submit"
+                        class="filter-apply-btn">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                    Apply Filters
+
+                </button>
+
+
+                @if (Model.IsFiltering)
+                {
+                    <a asp-controller="Home"
+                       asp-action="Shop"
+                       class="filter-clear-btn">
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        Clear
+
+                    </a>
+                }
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ========================================================
+             HOT PRODUCTS
+             ======================================================== -->
+        @if (!Model.IsFiltering && Model.HotProducts.Any())
+        {
+            <section class="product-section">
+
+                <div class="product-section-heading">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            TRENDING NOW
+                        </span>
+
+                        <h2>
+                            Hot Products
+                            <span>🔥</span>
+                        </h2>
+
+                        <p>
+                            Popular products customers are loving right now.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="product-grid">
+
+                    @foreach (var product in Model.HotProducts)
+                    {
+                        var image = product.ProductImages.FirstOrDefault()?.ImageUrl;
+
+                        <article class="shop-product-card">
+
+                            <a asp-controller="Product"
+                               asp-action="Details"
+                               asp-route-id="@product.ProductId"
+                               class="product-image-box">
+
+                                @if (!string.IsNullOrWhiteSpace(image))
+                                {
+                                    <img src="@image"
+                                         alt="@product.Name" />
+                                }
+                                else
+                                {
+                                    <div class="product-no-image">
+                                        <i class="fa-regular fa-image"></i>
+                                    </div>
+                                }
+
+                                <span class="hot-label">
+                                    <i class="fa-solid fa-fire"></i>
+                                    HOT
+                                </span>
+
+                            </a>
+
+
+                            <div class="shop-product-info">
+
+                                <span class="product-category">
+                                    @product.Category?.CategoryName
+                                </span>
+
+                                <h3>
+                                    @product.Name
+                                </h3>
+
+                                <p class="product-description">
+                                    @product.Description
+                                </p>
+
+
+                                <div class="product-meta">
+
+                                    <div class="product-rating">
+
+                                        <i class="fa-solid fa-star"></i>
+
+                                        <strong>
+                                            @(product.Reviews.Any()
+                                                ? product.Reviews.Average(r => r.Rating).ToString("0.0")
+                                                : "New")
+                                        </strong>
+
+                                        @if (product.Reviews.Any())
+                                        {
+                                            <span>
+                                                (@product.Reviews.Count)
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                    <strong class="product-price">
+                                        ৳@product.Price.ToString("N2")
+                                    </strong>
+
+                                </div>
+
+
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@product.ProductId"
+                                   class="product-view-btn">
+
+                                    View Product
+
+                                    <i class="fa-solid fa-arrow-right"></i>
+
+                                </a>
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+
+            </section>
+        }
+
+
+
+        <!-- ========================================================
+             NEW PRODUCTS
+             ======================================================== -->
+        @if (!Model.IsFiltering)
+        {
+            <section class="product-section recent-section">
+
+                <div class="product-section-heading">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            JUST ARRIVED
+                        </span>
+
+                        <h2>
+                            Recently Added
+                            <span>✨</span>
+                        </h2>
+
+                        <p>
+                            Fresh products recently added by our sellers.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                @if (Model.NewProducts.Any())
+                {
+                    <div class="product-grid">
+
+                        @foreach (var product in Model.NewProducts)
+                        {
+                            var image =
+                                product.ProductImages
+                                    .FirstOrDefault()
+                                    ?.ImageUrl;
+
+                            <article class="shop-product-card">
+
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@product.ProductId"
+                                   class="product-image-box">
+
+                                    @if (!string.IsNullOrWhiteSpace(image))
+                                    {
+                                        <img src="@image"
+                                             alt="@product.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="product-no-image">
+                                            <i class="fa-regular fa-image"></i>
+                                        </div>
+                                    }
+
+                                    <span class="new-label">
+                                        NEW
+                                    </span>
+
+                                </a>
+
+
+                                <div class="shop-product-info">
+
+                                    <span class="product-category">
+                                        @product.Category?.CategoryName
+                                    </span>
+
+                                    <h3>
+                                        @product.Name
+                                    </h3>
+
+                                    <p class="product-description">
+                                        @product.Description
+                                    </p>
+
+
+                                    <div class="product-meta">
+
+                                        <div class="product-rating">
+
+                                            <i class="fa-solid fa-star"></i>
+
+                                            <strong>
+                                                @(product.Reviews.Any()
+                                                    ? product.Reviews.Average(r => r.Rating).ToString("0.0")
+                                                    : "New")
+                                            </strong>
+
+                                            @if (product.Reviews.Any())
+                                            {
+                                                <span>
+                                                    (@product.Reviews.Count)
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                        <strong class="product-price">
+                                            ৳@product.Price.ToString("N2")
+                                        </strong>
+
+                                    </div>
+
+
+                                    <a asp-controller="Product"
+                                       asp-action="Details"
+                                       asp-route-id="@product.ProductId"
+                                       class="product-view-btn">
+
+                                        View Product
+
+                                        <i class="fa-solid fa-arrow-right"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </article>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="shop-empty-state">
+
+                        <i class="fa-regular fa-box-open"></i>
+
+                        <h3>
+                            No products available yet
+                        </h3>
+
+                        <p>
+                            New products will appear here as sellers add them.
+                        </p>
+
+                    </div>
+                }
+
+            </section>
+        }
+
+
+
+        <!-- ========================================================
+             SEARCH / FILTER RESULTS
+             ======================================================== -->
+        @if (Model.IsFiltering)
+        {
+            <section class="product-section">
+
+                <div class="product-section-heading">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            SEARCH RESULTS
+                        </span>
+
+                        <h2>
+                            Products matching your filters
+                        </h2>
+
+                        <p>
+                            @Model.SearchResults.Count result(s) found.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                @if (Model.SearchResults.Any())
+                {
+                    <div class="product-grid">
+
+                        @foreach (var product in Model.SearchResults)
+                        {
+                            var image =
+                                product.ProductImages
+                                    .FirstOrDefault()
+                                    ?.ImageUrl;
+
+                            <article class="shop-product-card">
+
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@product.ProductId"
+                                   class="product-image-box">
+
+                                    @if (!string.IsNullOrWhiteSpace(image))
+                                    {
+                                        <img src="@image"
+                                             alt="@product.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="product-no-image">
+                                            <i class="fa-regular fa-image"></i>
+                                        </div>
+                                    }
+
+                                </a>
+
+
+                                <div class="shop-product-info">
+
+                                    <span class="product-category">
+                                        @product.Category?.CategoryName
+                                    </span>
+
+                                    <h3>
+                                        @product.Name
+                                    </h3>
+
+                                    <p class="product-description">
+                                        @product.Description
+                                    </p>
+
+
+                                    <div class="product-meta">
+
+                                        <div class="product-rating">
+
+                                            <i class="fa-solid fa-star"></i>
+
+                                            <strong>
+                                                @(product.Reviews.Any()
+                                                    ? product.Reviews.Average(r => r.Rating).ToString("0.0")
+                                                    : "New")
+                                            </strong>
+
+                                            @if (product.Reviews.Any())
+                                            {
+                                                <span>
+                                                    (@product.Reviews.Count)
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                        <strong class="product-price">
+                                            ৳@product.Price.ToString("N2")
+                                        </strong>
+
+                                    </div>
+
+
+                                    <a asp-controller="Product"
+                                       asp-action="Details"
+                                       asp-route-id="@product.ProductId"
+                                       class="product-view-btn">
+
+                                        View Product
+
+                                        <i class="fa-solid fa-arrow-right"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </article>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="shop-empty-state">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <h3>
+                            No products found
+                        </h3>
+
+                        <p>
+                            Try changing your search or filters.
+                        </p>
+
+                        <a asp-controller="Home"
+                           asp-action="Shop"
+                           class="filter-clear-btn empty-clear">
+
+                            Clear Filters
+
+                        </a>
+
+                    </div>
+                }
+
+            </section>
+        }
+
+    </main>
+
+
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+
+    <footer class="shop-footer">
+
+        <div class="shop-footer-brand">
+
+            <span class="brand-mark">A</span>
+
+            <strong>AdiBuy</strong>
+
+        </div>
+
+        <p>
+            Your marketplace for discovering products you love.
+        </p>
+
+        <span>
+            © @DateTime.Now.Year AdiBuy
+        </span>
+
+    </footer>
+
+
+
+    <!-- ============================================================
+         PROFILE DROPDOWN SCRIPT
+         ============================================================ -->
+
+    <script>
+
+            const profileTrigger =
+                document.getElementById("profileTrigger");
+
+            const profileDropdown =
+                document.getElementById("profileDropdown");
+
+
+            profileTrigger.addEventListener("click", function(event) {
+
+                event.stopPropagation();
+
+                profileDropdown.classList.toggle("show");
+
+                profileTrigger.classList.toggle("active");
+
+            });
+
+
+            document.addEventListener("click", function() {
+
+                profileDropdown.classList.remove("show");
+
+                profileTrigger.classList.remove("active");
+
+            });
+
+
+            profileDropdown.addEventListener("click", function(event) {
+
+                event.stopPropagation();
+
+            });
+
+    </script>
+
+</body>
+</html>

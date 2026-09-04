@@ -1,0 +1,283 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Customer Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Account - AdiBuy</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+</head>
+
+<body class="auth-page register-page">
+
+    <div class="auth-background">
+        <div class="auth-orb auth-orb-one"></div>
+        <div class="auth-orb auth-orb-two"></div>
+        <div class="auth-orb auth-orb-three"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="auth-navbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="auth-nav-right">
+
+            <span class="auth-nav-text">
+                Already have an account?
+            </span>
+
+            <a asp-controller="Account"
+               asp-action="CustomerLogin"
+               class="auth-nav-link">
+                Sign In →
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- REGISTER -->
+    <main class="auth-container register-container">
+
+        <div class="auth-card register-card">
+
+            <div class="auth-card-top">
+
+                <div class="auth-icon">
+                    ✦
+                </div>
+
+                <span class="auth-label">
+                    CREATE YOUR ACCOUNT
+                </span>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h1>
+                    Start <span>shopping.</span>
+                </h1>
+
+                <p>
+                    Join AdiBuy and discover a smarter,
+                    simpler way to shop online.
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="CustomerRegister"
+                  method="post"
+                  class="auth-form">
+
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+
+                    <label for="Name">
+                        Full Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ◯
+                        </span>
+
+                        <input type="text"
+                               id="Name"
+                               name="Name"
+                               placeholder="Your full name"
+                               autocomplete="name"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="Email">
+                            Email
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                @@
+                            </span>
+                            <input type="email"
+                                   id="Email"
+                                   name="Email"
+                                   placeholder="you@example.com"
+                                   autocomplete="email"
+                                   required />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="Phone">
+                            Phone
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                #
+                            </span>
+
+                            <input type="tel"
+                                   id="Phone"
+                                   name="Phone"
+                                   placeholder="01XXXXXXXXX"
+                                   autocomplete="tel" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="Password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input type="password"
+                               id="Password"
+                               name="Password"
+                               placeholder="Create a password"
+                               autocomplete="new-password"
+                               required />
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+                            Show
+                        </button>
+
+                    </div>
+
+                    <div class="password-hint">
+                        Minimum 8 characters
+                    </div>
+
+                </div>
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-message">
+                </div>
+
+
+                <button type="submit"
+                        class="auth-button">
+
+                    <span>
+                        Create Account
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+
+            <a asp-controller="Account"
+               asp-action="CustomerLogin"
+               class="secondary-auth-button">
+
+                Sign In to Existing Account
+
+            </a>
+
+
+            <p class="seller-link">
+
+                Want to sell on AdiBuy?
+
+                <a asp-controller="Account"
+                   asp-action="SellerRegister">
+                    Become a Seller →
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function togglePassword() {
+
+            const password =
+                document.getElementById("Password");
+
+            const button =
+                document.querySelector(".password-toggle");
+
+            if (password.type === "password") {
+
+                password.type = "text";
+                button.textContent = "Hide";
+
+            } else {
+
+                password.type = "password";
+                button.textContent = "Show";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>

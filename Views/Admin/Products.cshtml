@@ -1,0 +1,323 @@
+﻿@model List<Ecom.Models.Product>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Product Management";
+
+    string? currentStatus = ViewBag.CurrentStatus as string;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Products - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-glow admin-glow-one"></div>
+    <div class="admin-glow admin-glow-two"></div>
+
+
+    <aside class="admin-sidebar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="logo admin-logo">
+            Adi<span>Buy</span>
+        </a>
+
+        <div class="admin-panel-label">
+            ADMIN CONTROL
+        </div>
+
+        <nav class="admin-nav">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="SellerApplications"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">◇</span>
+                <span>Seller Applications</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="admin-nav-link active">
+                <span class="admin-nav-icon">□</span>
+                <span>Products</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Sellers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♙</span>
+                <span>Sellers</span>
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Customers"
+               class="admin-nav-link">
+                <span class="admin-nav-icon">♧</span>
+                <span>Customers</span>
+            </a>
+
+        </nav>
+
+
+        <div class="admin-sidebar-bottom">
+
+            <div class="admin-role-card">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>System Control</span>
+                </div>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="admin-logout">
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-eyebrow">
+                    CATALOG MANAGEMENT
+                </span>
+
+                <h1>
+                    Products
+                </h1>
+
+                <p>
+                    Review seller submissions and manage
+                    products currently available on AdiBuy.
+                </p>
+
+            </div>
+
+            <div class="admin-top-actions">
+
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="admin-store-button">
+
+                    ← Dashboard
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- FILTERS -->
+
+        <div class="admin-filter-bar">
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               class="@(string.IsNullOrEmpty(currentStatus) ? "active" : "")">
+
+                All
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               asp-route-status="Pending"
+               class="@(currentStatus == "Pending" ? "active" : "")">
+
+                Pending
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               asp-route-status="Approved"
+               class="@(currentStatus == "Approved" ? "active" : "")">
+
+                Live
+
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Products"
+               asp-route-status="Rejected"
+               class="@(currentStatus == "Rejected" ? "active" : "")">
+
+                Rejected
+
+            </a>
+
+        </div>
+
+
+        <!-- PRODUCT GRID -->
+        @if (!Model.Any())
+        {
+            <div class="admin-empty-box">
+
+                <div>□</div>
+
+                <h3>
+                    No products found
+                </h3>
+
+                <p>
+                    There are currently no products in this category.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="admin-product-grid">
+
+                @foreach (var product in Model)
+                {
+                    var image =
+                        product.ProductImages
+                            .FirstOrDefault()?.ImageUrl;
+
+                    <a asp-controller="Admin"
+                       asp-action="ProductDetails"
+                       asp-route-id="@product.ProductId"
+                       class="admin-product-card">
+
+
+                        <div class="admin-product-image">
+
+                            @if (!string.IsNullOrWhiteSpace(image))
+                            {
+                                <img src="@image"
+                                     alt="@product.Name" />
+                            }
+                            else
+                            {
+                                <div class="admin-product-no-image">
+                                    □
+                                </div>
+                            }
+
+
+                            <span class="admin-product-status
+                                @(product.Status == ProductStatus.Approved
+                                    ? "approved"
+                                    : product.Status == ProductStatus.Rejected
+                                        ? "rejected"
+                                        : "pending")">
+
+                                @product.Status
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="admin-product-info">
+
+                            <span>
+                                @(product.Category?.CategoryName ?? "Uncategorized")
+                            </span>
+
+                            <h3>
+                                @product.Name
+                            </h3>
+
+                            <strong>
+                                ৳ @product.Price.ToString("N2")
+                            </strong>
+
+
+                            <div class="admin-product-seller">
+
+                                <span>Seller</span>
+
+                                <b>
+                                    @(product.Seller?.BusinessName
+                                        ?? product.Seller?.User?.Name
+                                        ?? "Unknown")
+                                </b>
+
+                            </div>
+
+
+                            <div class="admin-product-stock">
+
+                                <span>
+                                    Stock: @product.StockQuantity
+                                </span>
+
+                                <span>
+                                    @product.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+                }
+
+            </div>
+        }
+
+
+        <footer class="admin-footer">
+
+            <span>AdiBuy Administration</span>
+
+            <span>Product Moderation Center</span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

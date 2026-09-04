@@ -1,0 +1,315 @@
+﻿@model Ecom.ViewModels.CustomerProfileViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "My Profile";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Profile - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="~/css/adibuy.css" />
+
+    <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f6f8fb;
+                color: #1f2937;
+            }
+
+            .profile-page {
+                min-height: 100vh;
+            }
+
+            .profile-navbar {
+                height: 72px;
+                background: #111827;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 7%;
+                color: white;
+            }
+
+            .profile-brand {
+                font-size: 25px;
+                font-weight: 800;
+                text-decoration: none;
+                color: white;
+            }
+
+            .profile-brand span {
+                color: #60a5fa;
+            }
+
+            .back-shop {
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .back-shop:hover {
+                color: #60a5fa;
+            }
+
+            .profile-container {
+                width: min(900px, 90%);
+                margin: 45px auto;
+            }
+
+            .profile-header {
+                margin-bottom: 25px;
+            }
+
+            .profile-header h1 {
+                margin: 0 0 8px;
+                font-size: 32px;
+            }
+
+            .profile-header p {
+                margin: 0;
+                color: #6b7280;
+            }
+
+            .profile-card {
+                background: white;
+                border-radius: 18px;
+                padding: 35px;
+                box-shadow: 0 10px 35px rgba(0,0,0,.07);
+            }
+
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+                background: #2563eb;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 34px;
+                font-weight: 700;
+                margin-bottom: 25px;
+            }
+
+            .profile-section-title {
+                font-size: 19px;
+                font-weight: 700;
+                margin: 0 0 20px;
+            }
+
+            .profile-form {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 22px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .form-group.full {
+                grid-column: 1 / -1;
+            }
+
+            .form-group label {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .form-group input {
+                padding: 13px 14px;
+                border: 1px solid #d1d5db;
+                border-radius: 9px;
+                font-size: 15px;
+                outline: none;
+            }
+
+            .form-group input:focus {
+                border-color: #2563eb;
+            }
+
+            .validation {
+                color: #dc2626;
+                font-size: 13px;
+            }
+
+            .success-message {
+                background: #ecfdf5;
+                color: #047857;
+                padding: 13px 15px;
+                border-radius: 9px;
+                margin-bottom: 20px;
+            }
+
+            .save-button {
+                margin-top: 10px;
+                border: none;
+                background: #2563eb;
+                color: white;
+                padding: 13px 24px;
+                border-radius: 9px;
+                font-size: 15px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+            .save-button:hover {
+                background: #1d4ed8;
+            }
+
+            .account-info {
+                margin-top: 30px;
+                padding-top: 25px;
+                border-top: 1px solid #e5e7eb;
+                color: #6b7280;
+                font-size: 14px;
+            }
+
+            @@media (max-width: 650px) {
+                .profile-navbar {
+                    padding: 0 5%;
+                }
+
+                .profile-container {
+                    width: 92%;
+                }
+
+                .profile-card {
+                    padding: 25px;
+                }
+
+                .profile-form {
+                    grid-template-columns: 1fr;
+                }
+
+                .form-group.full {
+                    grid-column: auto;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-page">
+
+        <nav class="profile-navbar">
+            <a asp-controller="Home"
+               asp-action="Shop"
+               class="profile-brand">
+                Adi<span>Buy</span>
+            </a>
+
+            <a asp-controller="Home"
+               asp-action="Shop"
+               class="back-shop">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Shop
+            </a>
+        </nav>
+
+        <main class="profile-container">
+
+            <div class="profile-header">
+                <h1>My Profile</h1>
+                <p>Manage your personal information and account details.</p>
+            </div>
+
+            <div class="profile-card">
+
+                @if (TempData["Message"] != null)
+                {
+                    <div class="success-message">
+                        <i class="fa-solid fa-circle-check"></i>
+                        @TempData["Message"]
+                    </div>
+                }
+
+                <div class="profile-avatar">
+                    @(string.IsNullOrWhiteSpace(Model.Name)
+                        ? "U"
+                        : Model.Name.Substring(0, 1).ToUpper())
+                </div>
+
+                <h2 class="profile-section-title">
+                    Personal Information
+                </h2>
+
+                <form asp-action="Profile"
+                      asp-controller="Customer"
+                      method="post"
+                      class="profile-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation full"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name">Full Name</label>
+
+                        <input asp-for="Name"
+                               placeholder="Enter your full name" />
+
+                        <span asp-validation-for="Name"
+                              class="validation"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Phone">Phone Number</label>
+
+                        <input asp-for="Phone"
+                               placeholder="Enter your phone number" />
+
+                        <span asp-validation-for="Phone"
+                              class="validation"></span>
+                    </div>
+
+                    <div class="form-group full">
+                        <label asp-for="Email">Email Address</label>
+
+                        <input asp-for="Email"
+                               placeholder="Enter your email address" />
+
+                        <span asp-validation-for="Email"
+                              class="validation"></span>
+                    </div>
+
+                    <div class="form-group full">
+                        <button type="submit"
+                                class="save-button">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Save Changes
+                        </button>
+                    </div>
+
+                </form>
+
+                <div class="account-info">
+                    <strong>Account created:</strong>
+                    @Model.CreatedAt.ToLocalTime().ToString("MMMM dd, yyyy")
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

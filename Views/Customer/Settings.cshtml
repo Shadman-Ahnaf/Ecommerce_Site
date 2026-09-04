@@ -1,0 +1,234 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Settings";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Settings - AdiBuy</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="~/css/adibuy.css" />
+
+    <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f6f8fb;
+                color: #1f2937;
+            }
+
+            .settings-navbar {
+                height: 72px;
+                background: #111827;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 7%;
+            }
+
+            .settings-brand {
+                color: white;
+                text-decoration: none;
+                font-size: 25px;
+                font-weight: 800;
+            }
+
+                .settings-brand span {
+                    color: #60a5fa;
+                }
+
+            .settings-back {
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+                .settings-back:hover {
+                    color: #60a5fa;
+                }
+
+            .settings-container {
+                width: min(900px, 90%);
+                margin: 45px auto;
+            }
+
+            .settings-title h1 {
+                margin: 0 0 8px;
+                font-size: 32px;
+            }
+
+            .settings-title p {
+                color: #6b7280;
+                margin-bottom: 28px;
+            }
+
+            .settings-card {
+                background: white;
+                border-radius: 18px;
+                padding: 10px 0;
+                box-shadow: 0 10px 35px rgba(0,0,0,.07);
+            }
+
+            .setting-row {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 24px 30px;
+                border-bottom: 1px solid #eef0f3;
+            }
+
+                .setting-row:last-child {
+                    border-bottom: none;
+                }
+
+            .setting-icon {
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+                background: #eff6ff;
+                color: #2563eb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+            }
+
+            .setting-content {
+                flex: 1;
+            }
+
+                .setting-content h3 {
+                    margin: 0 0 5px;
+                    font-size: 16px;
+                }
+
+                .setting-content p {
+                    margin: 0;
+                    color: #6b7280;
+                    font-size: 14px;
+                }
+
+            .setting-status {
+                font-size: 13px;
+                color: #9ca3af;
+            }
+
+            @@media (max-width: 600px) {
+                .settings-navbar {
+                    padding: 0 5%;
+                }
+
+                .setting-row {
+                    padding: 20px;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <nav class="settings-navbar">
+        <a asp-controller="Home"
+           asp-action="Shop"
+           class="settings-brand">
+            Adi<span>Buy</span>
+        </a>
+
+        <a asp-controller="Home"
+           asp-action="Shop"
+           class="settings-back">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Shop
+        </a>
+    </nav>
+
+    <main class="settings-container">
+
+        <div class="settings-title">
+            <h1>Settings</h1>
+            <p>Manage your shopping preferences and account options.</p>
+        </div>
+
+        <div class="settings-card">
+
+            <div class="setting-row">
+                <div class="setting-icon">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+
+                <div class="setting-content">
+                    <h3>Account Information</h3>
+                    <p>Update your name, email and phone number.</p>
+                </div>
+
+                <a asp-controller="Customer"
+                   asp-action="Profile">
+                    Edit
+                </a>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <div class="setting-content">
+                    <h3>Password & Security</h3>
+                    <p>Manage your password and account security.</p>
+                </div>
+
+                <span class="setting-status">Coming Soon</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-icon">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+
+                <div class="setting-content">
+                    <h3>Notifications</h3>
+                    <p>Control your order and account notifications.</p>
+                </div>
+
+                <span class="setting-status">Coming Soon</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-icon">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+
+                <div class="setting-content">
+                    <h3>Delivery Preferences</h3>
+                    <p>Manage your preferred delivery information.</p>
+                </div>
+
+                <span class="setting-status">Coming Soon</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div class="setting-content">
+                    <h3>Privacy</h3>
+                    <p>Review your privacy and account preferences.</p>
+                </div>
+
+                <span class="setting-status">Coming Soon</span>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,530 @@
+﻿@model Ecom.ViewModels.LandingPageViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "AdiBuy";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>AdiBuy - Next Generation E-Commerce</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/adibuy.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="landing-page">
+
+    <div class="landing-glow landing-glow-one"></div>
+    <div class="landing-glow landing-glow-two"></div>
+    <div class="landing-glow landing-glow-three"></div>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar landing-navbar">
+
+        <a class="logo"
+           asp-controller="Home"
+           asp-action="Index">
+
+            Adi<span>Buy</span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="active">
+                Home
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index">
+                Products
+            </a>
+
+            <a asp-controller="Account"
+               asp-action="CustomerLogin">
+                Customer Login
+            </a>
+
+            <a asp-controller="Account"
+               asp-action="CustomerRegister"
+               class="nav-register">
+                Register
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main>
+
+
+        <!-- HERO -->
+
+        <section class="landing-hero">
+
+            <div class="landing-hero-content">
+
+                <div class="landing-badge">
+
+                    <span></span>
+
+                    BANGLADESH'S SMART MARKETPLACE
+
+                </div>
+
+
+                <h1>
+
+                    Shop smarter.
+                    <br />
+
+                    <span>Live better.</span>
+
+                </h1>
+
+
+                <p>
+
+                    Discover products from trusted sellers,
+                    explore exclusive offers and enjoy a
+                    modern shopping experience built for you.
+
+                </p>
+
+
+                <div class="landing-buttons">
+
+                    <a class="landing-btn landing-btn-primary"
+                       asp-controller="Product"
+                       asp-action="Index">
+
+                        Explore Products
+
+                        <span>→</span>
+
+                    </a>
+
+
+                    <a class="landing-btn landing-btn-secondary"
+                       asp-controller="Account"
+                       asp-action="CustomerRegister">
+
+                        Start Shopping
+
+                    </a>
+
+                </div>
+
+
+                <div class="landing-stats">
+
+                    <div>
+
+                        <strong>100%</strong>
+
+                        <span>Secure</span>
+
+                    </div>
+
+
+                    <div class="stat-line"></div>
+
+
+                    <div>
+
+                        <strong>Trusted</strong>
+
+                        <span>Sellers</span>
+
+                    </div>
+
+
+                    <div class="stat-line"></div>
+
+
+                    <div>
+
+                        <strong>Exclusive</strong>
+
+                        <span>Offers</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO VISUAL -->
+
+            <div class="landing-visual">
+
+                <div class="visual-ring ring-one"></div>
+
+                <div class="visual-ring ring-two"></div>
+
+                <div class="visual-ring ring-three"></div>
+
+
+                <div class="floating-product-card">
+
+                    <div class="floating-top">
+
+                        <span>ADI</span>
+
+                        <small>MARKETPLACE</small>
+
+                    </div>
+
+
+                    <div class="floating-center">
+
+                        <strong>BUY</strong>
+
+                        <span>DISCOVER MORE</span>
+
+                    </div>
+
+
+                    <div class="floating-bottom">
+
+                        <span>✦</span>
+                        <span>✦</span>
+                        <span>✦</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NEW PRODUCTS -->
+
+        <section class="landing-products">
+
+            <div class="landing-section-heading">
+
+                <div>
+
+                    <span>
+                        JUST ARRIVED
+                    </span>
+
+                    <h2>
+                        Fresh <strong>Products.</strong>
+                    </h2>
+
+                </div>
+
+
+                <a asp-controller="Product"
+                   asp-action="Index">
+
+                    View All →
+
+                </a>
+
+            </div>
+
+
+            @if (Model.NewProducts.Any())
+            {
+                <div class="landing-product-grid">
+
+                    @foreach (var product in Model.NewProducts)
+                    {
+                        var image = product.ProductImages
+                            .FirstOrDefault()?.ImageUrl;
+
+                        <div class="landing-product-card">
+
+                            <div class="landing-product-image">
+
+                                <span class="new-tag">
+                                    NEW
+                                </span>
+
+                                @if (!string.IsNullOrWhiteSpace(image))
+                                {
+                                    <img src="@image"
+                                         alt="@product.Name" />
+                                }
+                                else
+                                {
+                                    <div class="landing-no-image">
+                                        ◇
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <div class="landing-product-info">
+
+                                <span>
+                                    @product.Category?.CategoryName
+                                </span>
+
+                                <h3>
+                                    @product.Name
+                                </h3>
+
+                                <strong>
+                                    ৳ @product.Price.ToString("N2")
+                                </strong>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="landing-empty-products">
+
+                    New products will appear here soon.
+
+                </div>
+            }
+
+        </section>
+
+
+        <!-- FEATURES -->
+
+        <section class="landing-features">
+
+            <div class="landing-section-heading centered">
+
+                <span>
+                    WHY ADIBUY
+                </span>
+
+                <h2>
+                    Everything you need.
+                    <strong>One marketplace.</strong>
+                </h2>
+
+                <p>
+                    Simple, secure and modern shopping
+                    designed around you.
+                </p>
+
+            </div>
+
+
+            <div class="landing-feature-grid">
+
+
+                <div class="landing-feature-card">
+
+                    <div class="feature-number">
+                        01
+                    </div>
+
+                    <div class="feature-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Secure Shopping
+                    </h3>
+
+                    <p>
+                        Shop confidently with secure accounts
+                        and trusted sellers.
+                    </p>
+
+                </div>
+
+
+                <div class="landing-feature-card">
+
+                    <div class="feature-number">
+                        02
+                    </div>
+
+                    <div class="feature-icon">
+                        🛍️
+                    </div>
+
+                    <h3>
+                        Trusted Marketplace
+                    </h3>
+
+                    <p>
+                        Discover products from approved sellers
+                        in one convenient place.
+                    </p>
+
+                </div>
+
+
+                <div class="landing-feature-card">
+
+                    <div class="feature-number">
+                        03
+                    </div>
+
+                    <div class="feature-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Exclusive Offers
+                    </h3>
+
+                    <p>
+                        Find special deals and exciting offers
+                        while you shop.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SELLER CTA -->
+
+        <section class="landing-seller">
+
+            <div class="seller-decoration seller-decoration-one"></div>
+            <div class="seller-decoration seller-decoration-two"></div>
+
+
+            <div class="landing-seller-content">
+
+                <span>
+                    FOR BUSINESS OWNERS
+                </span>
+
+                <h2>
+                    Have something
+                    <strong>to sell?</strong>
+                </h2>
+
+                <p>
+                    Join AdiBuy as a seller and bring your
+                    products to customers across Bangladesh.
+                </p>
+
+                <a asp-controller="Account"
+                   asp-action="SellerRegister">
+
+                    Become a Seller
+
+                    <span>→</span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="landing-footer">
+
+        <div class="footer-brand">
+            Adi<span>Buy</span>
+        </div>
+
+        <p>
+            © 2026 AdiBuy. Smart shopping, made simple.
+        </p>
+
+        <div class="footer-links">
+
+            <a asp-controller="Account"
+               asp-action="SellerLogin">
+
+                Seller Login →
+
+            </a>
+
+            <span class="footer-divider">|</span>
+
+            <a asp-controller="Account"
+               asp-action="AdminLogin">
+
+                Admin Login →
+
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <script>
+
+            const animatedElements =
+                document.querySelectorAll(
+                    ".landing-product-card, .landing-feature-card"
+                );
+
+            const observer =
+                new IntersectionObserver(
+                    entries => {
+
+                        entries.forEach(entry => {
+
+                            if (entry.isIntersecting) {
+
+                                entry.target.classList.add("show");
+
+                            }
+
+                        });
+
+                    },
+                    {
+                        threshold: 0.12
+                    }
+                );
+
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+
+    </script>
+
+</body>
+
+</html>
